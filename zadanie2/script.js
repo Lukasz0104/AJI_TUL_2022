@@ -24,38 +24,53 @@ const updateTodoList = () =>
 		let dueDateBeforeValue = dueDateBeforeInput.val();
 		if (dueDateBeforeValue && !isDateBefore(todo.dueDate, dueDateBeforeValue)) continue;
 
-		let newTableRow = $("<tr>");
+		let newTableRow = $("<tr>").appendTo(todoListTable);
 
-		let idCell = $(`<td class="text-center">${id + 1}</td>`);
+		// create td with id
+		$("<td>", {
+			"class": "text-center",
+			text: id + 1
+		}).appendTo(newTableRow);
 
-		let titleCell = $(`<td>${todo.title}</td>`);
+		// create td with title
+		$("<td>", {
+			text: todo.title
+		}).appendTo(newTableRow);
 
-		let descriptionCell = $(`<td>${todo.description}</td>`);
+		// create td with description
+		$("<td>", {
+			text: todo.description
+		}).appendTo(newTableRow);
 
-		let placeCell = (`<td>${todo.place}</td>`);
+		// create td with place
+		$("<td>", {
+			text: todo.place
+		}).appendTo(newTableRow);
 
-		let dueDateCell = $(`<td>${(new Date(todo.dueDate)).toDateString()}</td>`);
+		// create td with due date
+		$("<td>", {
+			text: (new Date(todo.dueDate)).toDateString()
+		}).appendTo(newTableRow);
 
-		let buttonCell = $("<td>");
-
-		let newDeleteButton = $(`<button class="btn btn-outline-danger">Delete</button>`);
-		newDeleteButton.click(() => deleteTodo(id));
-
-		buttonCell.append(newDeleteButton);
-
-		newTableRow.append(idCell, titleCell, descriptionCell, placeCell, dueDateCell, buttonCell);
-		todoListTable.append(newTableRow);
+		// create td with delete button
+		$("<td>")
+			.append($("<button>", {
+				"class": "btn btn-outline-danger",
+				text: "Delete",
+				click: () => deleteTodo(id)
+			}))
+			.appendTo(newTableRow);
 	}
 }
 
 const isDateAfter = (date1, date2) =>
 {
-	return (new Date(date1)) > (new Date(date2));
+	return date1 > date2;
 }
 
 const isDateBefore = (date1, date2) =>
 {
-	return (new Date(date1)) < (new Date(date2));
+	return date1 < date2;
 }
 
 
@@ -63,6 +78,7 @@ const deleteTodo = (index) =>
 {
 	todoList.splice(index, 1);
 	updateJSONbin();
+	updateTodoList();
 }
 
 const addTodo = () =>
@@ -71,19 +87,20 @@ const addTodo = () =>
 	let newTitle = $("#inputTitle").val();
 	let newDescription = $("#inputDescription").val();
 	let newPlace = $("#inputPlace").val();
-	let newDate = new Date($("#inputDate").val());
+	let newDueDate = new Date($("#inputDate").val());
+
 	//create new item
 	let newTodo = {
 		title: newTitle,
 		description: newDescription,
 		place: newPlace,
-		dueDate: newDate
+		dueDate: newDueDate
 	};
 	//add item to the list
 	todoList.push(newTodo);
 
-	window.localStorage.setItem("todos", JSON.stringify(todoList));
 	updateJSONbin();
+	updateTodoList();
 }
 
 const updateJSONbin = () =>
@@ -111,7 +128,6 @@ const updateJSONbin = () =>
 $(() => 
 {
 	$.ajax({
-		// copy Your bin identifier here. It can be obtained in the dashboard
 		url: 'https://api.jsonbin.io/v3/b/633ef4890e6a79321e1f2c77',
 		type: 'GET',
 		headers: { //Required only if you are trying to access a private bin
@@ -133,10 +149,13 @@ $(() =>
 	{
 		event.preventDefault(); // prevent page reload
 		addTodo();
+		updateTodoList();
 	})
 
 
 	$('form input[type=date]').val(new Date().toISOString().substring(0, 10));
 
-	let interval = setInterval(updateTodoList, 1000);
+	// add event listeners
+	filterInput.on('input', () => updateTodoList());
+	$('input[type=date]').slice(1).change(() => updateTodoList());
 });
