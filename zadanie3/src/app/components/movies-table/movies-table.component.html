@@ -1,0 +1,26 @@
+<ng-container *ngIf="movies.length > 0 else elseBlock">
+    <table class="table table-striped">
+        <thead class="text-center">
+            <th class="col col-3">Title</th>
+            <th class="col col-2">Production Year</th>
+            <th class="col">Cast</th>
+            <th class="col-3">Genres</th>
+        </thead>
+        <tbody class="table-group-divider">
+            <tr *ngFor="let movie of movies">
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.year }}</td>
+                <td>{{ movie.cast.join(', ') }}</td>
+                <td>{{ movie.genres.join(', ') }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <button
+        (click)="loadMoreMovies()"
+        class="btn btn-info">
+        Load next movies
+    </button>
+</ng-container>
+<ng-template #elseBlock>
+    <p>Loading data, please wait...</p>
+</ng-template>
