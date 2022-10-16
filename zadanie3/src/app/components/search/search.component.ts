@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { FilterParams } from 'src/app/filter-params';
 
 @Component({
     selector: 'app-search',
@@ -7,5 +8,15 @@ import { Component } from '@angular/core';
 })
 export class SearchComponent
 {
+    @Output()
+    filterParamChange = new EventEmitter<FilterParams>();
+
+    params: FilterParams = new FilterParams();
+
     constructor() { }
+
+    emit()
+    {
+        this.filterParamChange.emit(this.params);
+    }
 }

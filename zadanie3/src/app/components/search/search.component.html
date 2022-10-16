@@ -1,24 +1,37 @@
 <div class="row mb-2">
     <label>Title</label>
-    <input type="text">
+    <input
+        type="text"
+        (input)="emit()"
+        [(ngModel)]="params.title">
 </div>
 <div class="row mb-2">
     <label class="col col-3">Production year after</label>
     <input
         type="number"
         class="col"
-        placeholder="Year between 1900 and 2018">
+        min="1900"
+        max="2018"
+        placeholder="Year between 1900 and 2018"
+        (change)="emit()"
+        [(ngModel)]="params.prodYearAfter">
 </div>
 <div class="row mb-2">
     <label class="col col-3">Production year before</label>
     <input
         type="number"
         class="col"
-        placeholder="Year between 1900 and 2018">
+        min="1900"
+        max="2018"
+        placeholder="Year between 1900 and 2018"
+        (change)="emit()"
+        [(ngModel)]="params.prodYearBefore">
 </div>
 <div class="row mb-2">
     <label>Cast</label>
     <input
         type="text"
-        placeholder="First name and last name">
+        placeholder="First name and last name"
+        (input)="emit()"
+        [(ngModel)]="params.cast">
 </div>
