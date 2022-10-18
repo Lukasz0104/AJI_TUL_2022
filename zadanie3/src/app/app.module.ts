@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
+import { MoviesByCastComponent } from './components/movies-by-cast/movies-by-cast.component';
+import { MoviesByGenresComponent } from './components/movies-by-genres/movies-by-genres.component';
 import { MoviesTableComponent } from './components/movies-table/movies-table.component';
 import { SearchComponent } from './components/search/search.component';
 
@@ -9,7 +11,9 @@ import { SearchComponent } from './components/search/search.component';
     declarations: [
         AppComponent,
         SearchComponent,
-        MoviesTableComponent
+        MoviesTableComponent,
+        MoviesByGenresComponent,
+        MoviesByCastComponent
     ],
     imports: [
         BrowserModule,

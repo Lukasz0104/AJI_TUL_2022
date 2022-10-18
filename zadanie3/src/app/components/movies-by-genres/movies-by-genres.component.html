@@ -1,0 +1,7 @@
+<h1>Movies by genres:</h1>
+<div *ngFor="let genre of genres">
+<h5>{{ genre }}</h5>
+    <ol>
+        <li *ngFor="let movie of this.movieService.getMoviesForGenre(genre)">{{ movie.title }}</li>
+    </ol>
+</div>
