@@ -27,6 +27,7 @@ export class MoviesTableComponent implements OnInit, OnChanges
 
     ngOnChanges(changes: SimpleChanges): void
     {
+        this.count = 10;
         this.loadMovies()
     }
 

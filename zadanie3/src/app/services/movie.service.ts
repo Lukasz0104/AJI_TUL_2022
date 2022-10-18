@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { each, filter, includes, map, some, take, takeRight } from 'lodash-es';
 import { FilterParams } from '../filter-params';
 import { Movie } from '../movie';
 import moviesData from './../../assets/movies.json';
@@ -14,40 +15,38 @@ export class MovieService
     constructor()
     {
         this.movies = (moviesData as Movie[]);
-        this.last100Movies = this.movies.slice(-100);
+        this.last100Movies = takeRight(this.movies, 100);
     }
 
     loadMovies(count: number, params: FilterParams): Movie[]
     {
-        return this.movies
-            .filter(m => m.title.includes(params.title)
-                && m.year >= params.prodYearAfter
-                && m.year <= params.prodYearBefore
-                && m.cast.some(c => c.includes(params.cast)))
-            .slice(0, count);
+        return take(filter(this.movies, (m) => m.title.includes(params.title)
+            && m.year >= params.prodYearAfter
+            && m.year <= params.prodYearBefore
+            && some(m.cast, (c) => includes(c, params.cast))), count);
     }
 
     getGenres(): string[]
     {
         let genres = new Set();
-        this.last100Movies.map(m => m.genres.forEach(g => genres.add(g)));
+        each(this.last100Movies, (m) => each(m.genres, (g) => genres.add(g)));
         return <string[]>(Array.from(genres));
     }
 
     getMoviesForGenre(genre: string): any
     {
-        return this.last100Movies.filter(m => m.genres.includes(genre));
+        return filter(this.last100Movies, (m) => includes(m.genres, genre));
     }
 
     getActors(): string[]
     {
         let actors = new Set();
-        this.last100Movies.map(m => m.cast.forEach(actor => actors.add(actor)));
+        each(this.last100Movies, (m) => each(m.cast, (a) => actors.add(a)));
         return <string[]>(Array.from(actors));
     }
 
     getMoviesForActor(actor: string): string[]
     {
-        return this.last100Movies.filter(m => m.cast.includes(actor)).map(m => m.title);
+        return map(filter(this.last100Movies, (m) => includes(m.cast, actor)), (m: Movie) => m.title);
     }
 }
