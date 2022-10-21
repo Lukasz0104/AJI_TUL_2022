@@ -14,7 +14,6 @@ export class ProductService {
     }
 
     create(createProductDto: CreateProductDto): Product {
-        console.log(createProductDto);
         const id = 1 + this.products.size;
         const p: Product = createProductDto.mapToProduct();
         p.id = id;
