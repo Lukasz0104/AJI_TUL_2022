@@ -5,7 +5,10 @@ import {
     Body,
     Patch,
     Param,
-    Delete
+    Delete,
+    HttpCode,
+    UsePipes,
+    ValidationPipe
 } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -27,6 +30,7 @@ export class ProductController {
     }
 
     @Post()
+    @UsePipes(ValidationPipe)
     create(@Body() createProductDto: CreateProductDto): Product {
         return this.productService.create(createProductDto);
     }
@@ -40,6 +44,7 @@ export class ProductController {
     }
 
     @Delete(':id')
+    @HttpCode(204)
     remove(@Param('id') id: string): void {
         return this.productService.remove(+id);
     }
