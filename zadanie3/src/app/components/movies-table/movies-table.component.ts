@@ -33,7 +33,10 @@ export class MoviesTableComponent implements OnInit, OnChanges
 
     ngOnInit(): void
     {
-        this.loadMovies();
+        this.movieService.notify$.subscribe(() =>
+        {
+            this.loadMovies();
+        })
     }
 
     loadMovies(): void

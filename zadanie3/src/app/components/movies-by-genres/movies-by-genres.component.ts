@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MovieService } from 'src/app/services/movie.service';
 
 @Component({
@@ -6,17 +6,33 @@ import { MovieService } from 'src/app/services/movie.service';
     templateUrl: './movies-by-genres.component.html',
     styleUrls: ['./movies-by-genres.component.css']
 })
-export class MoviesByGenresComponent
+export class MoviesByGenresComponent implements OnInit
 {
-    private _genres: string[];
+    private _genres: string[] = [];
+    private _moviesByGenre: Map<string, string[]> = new Map();
 
     public get genres()
     {
         return this._genres;
     }
 
-    constructor(public movieService: MovieService)
+    constructor(public movieService: MovieService) { }
+
+    ngOnInit(): void
     {
-        this._genres = movieService.getGenres();
+        this.movieService.notify$.subscribe(() =>
+        {
+            this._genres = this.movieService.getGenres();
+
+            for (let g of this._genres)
+            {
+                this._moviesByGenre.set(g, this.movieService.getMoviesForGenre(g));
+            }
+        })
+    }
+
+    getMovieForGenre(genre: string): string[]
+    {
+        return this._moviesByGenre.get(genre) || [];
     }
 }

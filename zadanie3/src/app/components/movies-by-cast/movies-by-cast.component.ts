@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MovieService } from 'src/app/services/movie.service';
 
 @Component({
@@ -6,18 +6,33 @@ import { MovieService } from 'src/app/services/movie.service';
     templateUrl: './movies-by-cast.component.html',
     styleUrls: ['./movies-by-cast.component.css']
 })
-export class MoviesByCastComponent
+export class MoviesByCastComponent implements OnInit
 {
-    private readonly _actors: string[];
+    private _actors: string[] = [];
+    private _moviesByActor: Map<string, string[]> = new Map();
 
     public get actors()
     {
         return this._actors;
     }
 
-    constructor(protected movieService: MovieService)
+    constructor(private movieService: MovieService) { }
+
+    ngOnInit(): void
     {
-        this._actors = this.movieService.getActors();
+        this.movieService.notify$.subscribe(() =>
+        {
+            this._actors = this.movieService.getActors();
+
+            for (let actor of this._actors)
+            {
+                this._moviesByActor.set(actor, this.movieService.getMoviesForActor(actor));
+            }
+        })
     }
 
+    public moviesForActor(actor: string): string[]
+    {
+        return this._moviesByActor.get(actor) || [];
+    }
 }

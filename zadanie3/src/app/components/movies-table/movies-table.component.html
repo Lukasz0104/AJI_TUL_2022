@@ -15,7 +15,8 @@
             </tr>
         </tbody>
     </table>
-    <button *ngIf="movies.length === count"
+    <button
+        *ngIf="movies.length === count"
         (click)="loadMoreMovies()"
         class="btn btn-info">
         Load next {{ incrementValue }} movies

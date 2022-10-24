@@ -1,9 +1,14 @@
 <h1>Movies by cast</h1>
-<div class="scroll-container">
+<div
+    class="scroll-container"
+    *ngIf="actors.length > 0 else loadingDataBlock">
     <div *ngFor="let actor of actors">
         <h5>{{ actor }}</h5>
         <ol>
-            <li *ngFor="let movie of this.movieService.getMoviesForActor(actor)">{{ movie }}</li>
+            <li *ngFor="let movie of this.moviesForActor(actor)">{{ movie }}</li>
         </ol>
     </div>
 </div>
+<ng-template #loadingDataBlock>
+    <p>Loading data, please wait...</p>
+</ng-template>
