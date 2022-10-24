@@ -15,12 +15,17 @@
             </tr>
         </tbody>
     </table>
-    <button
+    <button *ngIf="movies.length === count"
         (click)="loadMoreMovies()"
         class="btn btn-info">
         Load next {{ incrementValue }} movies
     </button>
 </ng-container>
 <ng-template #elseBlock>
-    <p>Loading data, please wait...</p>
+    <ng-container *ngIf="isFilterParamsEmpty() else noMoviesFound">
+        <p>Loading data, please wait...</p>
+    </ng-container>
+    <ng-template #noMoviesFound>
+        <p>No movies found with current filters.</p>
+    </ng-template>
 </ng-template>

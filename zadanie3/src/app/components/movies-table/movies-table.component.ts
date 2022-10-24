@@ -25,7 +25,7 @@ export class MoviesTableComponent implements OnInit, OnChanges
 
     constructor(private movieService: MovieService) { }
 
-    ngOnChanges(changes: SimpleChanges): void
+    ngOnChanges(_changes: SimpleChanges): void
     {
         this.count = 10;
         this.loadMovies()
@@ -46,5 +46,10 @@ export class MoviesTableComponent implements OnInit, OnChanges
     {
         this.count += this._incrementValue;
         this.movies = this.movieService.loadMovies(this.count, this.params);
+    }
+
+    isFilterParamsEmpty(): boolean
+    {
+        return this.params.cast === '' && this.params.prodYearAfter === 1900 && this.params.prodYearBefore === 2018 && this.params.title === '';
     }
 }

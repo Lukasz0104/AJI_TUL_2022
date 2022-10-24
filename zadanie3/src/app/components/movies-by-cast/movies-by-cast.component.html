@@ -1,7 +1,9 @@
 <h1>Movies by cast</h1>
-<div *ngFor="let actor of actors">
-    <h5>{{ actor }}</h5>
-    <ol>
-        <li *ngFor="let movie of this.movieService.getMoviesForActor(actor)">{{ movie }}</li>
-    </ol>
+<div class="scroll-container">
+    <div *ngFor="let actor of actors">
+        <h5>{{ actor }}</h5>
+        <ol>
+            <li *ngFor="let movie of this.movieService.getMoviesForActor(actor)">{{ movie }}</li>
+        </ol>
+    </div>
 </div>

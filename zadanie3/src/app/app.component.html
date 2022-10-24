@@ -1,11 +1,15 @@
-<div class="container container-fluid">
+<div class="container container-fluid mb-3">
     <h1 class="text-center">Movie library</h1>
     <app-search
         class="row justify-content-center"
-        (filterParamChange)="paramsChanged($event)"></app-search>
+        (filterParamChange)="paramsChanged($event)">
+    </app-search>
     <app-movies-table
         class="row justify-content-center"
-        [params]="filterParams"></app-movies-table>
+        [params]="filterParams">
+    </app-movies-table>
+    <hr>
     <app-movies-by-genres></app-movies-by-genres>
+    <hr>
     <app-movies-by-cast></app-movies-by-cast>
 </div>
