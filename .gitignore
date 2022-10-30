@@ -2,3 +2,4 @@ zadanie1/
 .vscode/
 /**/node_modules/
 *zip
+zadanie4/backend/*.sqlite

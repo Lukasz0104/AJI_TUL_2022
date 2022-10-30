@@ -22,18 +22,18 @@ export class ProductController {
     constructor(private readonly productService: ProductService) {}
 
     @Get()
-    findAll(): Product[] {
+    findAll(): Promise<Product[]> {
         return this.productService.findAll();
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string): Product {
+    findOne(@Param('id') id: string): Promise<Product> {
         return this.productService.findOne(+id);
     }
 
     @Post()
     @UsePipes(ValidationPipe)
-    create(@Body() createProductDto: CreateProductDto): Product {
+    create(@Body() createProductDto: CreateProductDto): Promise<Product> {
         return this.productService.create(createProductDto);
     }
 
@@ -41,13 +41,13 @@ export class ProductController {
     update(
         @Param('id') id: string,
         @Body() updateProductDto: UpdateProductDto
-    ): Product {
+    ): Promise<Product> {
         return this.productService.update(+id, updateProductDto);
     }
 
     @Delete(':id')
     @HttpCode(204)
-    remove(@Param('id') id: string): void {
+    remove(@Param('id') id: string): Promise<void> {
         return this.productService.remove(+id);
     }
 }

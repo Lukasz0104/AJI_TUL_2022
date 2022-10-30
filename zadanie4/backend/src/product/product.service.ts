@@ -1,41 +1,40 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 
 @Injectable()
 export class ProductService {
-    private products: Map<number, Product> = new Map();
-
-    constructor() {
+    constructor(@InjectRepository(Product) private repo: Repository<Product>) {
         const p = new Product('Bottle of water', 'Necessary to survive', 1, 1);
-        p.id = 1;
-        this.products.set(1, p);
+        repo.save(p);
     }
 
-    create(createProductDto: CreateProductDto): Product {
-        const id = 1 + Math.max(0, ...this.products.keys());
+    async create(createProductDto: CreateProductDto): Promise<Product> {
         const p: Product = createProductDto.mapToProduct();
-        p.id = id;
-        this.products.set(id, p);
-        return p;
+        return await this.repo.save(p);
     }
 
-    findAll(): Product[] {
-        return Array.from(this.products.values());
+    async findAll(): Promise<Product[]> {
+        return await this.repo.find();
     }
 
-    findOne(id: number): Product {
-        const p = this.products.get(id);
+    async findOne(id: number): Promise<Product> {
+        const p = await this.repo.findOneBy({ id: id });
 
-        if (undefined === p) {
+        if (null === p) {
             throw new NotFoundException();
         }
         return p;
     }
 
-    update(id: number, updateProductDto: UpdateProductDto): Product {
-        const p: Product = this.products.get(id);
+    async update(
+        id: number,
+        updateProductDto: UpdateProductDto
+    ): Promise<Product> {
+        const p = await this.repo.findOneBy({ id: id });
 
         if (undefined === p) {
             throw new NotFoundException();
@@ -46,11 +45,10 @@ export class ProductService {
         p.unitPrice = updateProductDto.unitPrice ?? p.unitPrice;
         p.unitWeight = updateProductDto.unitWeight ?? p.unitWeight;
 
-        this.products.set(id, p);
-        return p;
+        return this.repo.save(p);
     }
 
-    remove(id: number): void {
-        this.products.delete(id);
+    async remove(id: number): Promise<void> {
+        await this.repo.delete({ id: id });
     }
 }
