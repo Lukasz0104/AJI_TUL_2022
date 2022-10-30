@@ -14,7 +14,7 @@ export class ProductService {
     }
 
     create(createProductDto: CreateProductDto): Product {
-        const id = 1 + this.products.size;
+        const id = 1 + Math.max(0, ...this.products.keys());
         const p: Product = createProductDto.mapToProduct();
         p.id = id;
         this.products.set(id, p);
@@ -51,8 +51,6 @@ export class ProductService {
     }
 
     remove(id: number): void {
-        if (false === this.products.delete(id)) {
-            throw new NotFoundException();
-        }
+        this.products.delete(id);
     }
 }
