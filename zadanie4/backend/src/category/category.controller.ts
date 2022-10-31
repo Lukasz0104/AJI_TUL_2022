@@ -9,7 +9,7 @@ export class CategoryController {
     constructor(private readonly categoryService: CategoryService) {}
 
     @Get()
-    findAll(): Category[] {
+    async findAll(): Promise<Category[]> {
         return this.categoryService.findAll();
     }
 }
