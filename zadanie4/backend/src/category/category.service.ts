@@ -7,16 +7,7 @@ import { Category } from './entities/category.entity';
 export class CategoryService {
     constructor(
         @InjectRepository(Category) private readonly repo: Repository<Category>
-    ) {
-        this.repo.insert([
-            new Category('food and drinks'),
-            new Category('books'),
-            new Category('sport equipment'),
-            new Category('furniture'),
-            new Category('clothing'),
-            new Category('toys')
-        ]);
-    }
+    ) {}
 
     async findAll(): Promise<Category[]> {
         return await this.repo.find();

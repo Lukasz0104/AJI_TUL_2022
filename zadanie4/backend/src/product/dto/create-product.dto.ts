@@ -1,5 +1,4 @@
 import { IsNotEmpty, IsNumber, IsPositive, IsString } from 'class-validator';
-import { Product } from '../entities/product.entity';
 
 export class CreateProductDto {
     @IsString()
@@ -18,24 +17,20 @@ export class CreateProductDto {
     @IsPositive()
     unitWeight: number;
 
+    @IsNumber()
+    categoryId: number;
+
     constructor(
         name: string,
         description: string,
         unitPrice: number,
-        unitWeight: number
+        unitWeight: number,
+        categoryId: number
     ) {
         this.name = name;
         this.description = description;
         this.unitPrice = unitPrice;
         this.unitWeight = unitWeight;
-    }
-
-    mapToProduct(): Product {
-        return new Product(
-            this.name,
-            this.description,
-            this.unitPrice,
-            this.unitWeight
-        );
+        this.categoryId = categoryId;
     }
 }
