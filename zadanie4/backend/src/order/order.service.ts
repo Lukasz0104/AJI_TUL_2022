@@ -64,7 +64,20 @@ export class OrderService {
         order.username = dto.username;
 
         order.products = await Promise.all(
-            dto.products.map(async p => await this.mapDtoToOrderDetails(p)) // TODO group by productId
+            Array.from(
+                dto.products
+                    .reduce((map, dto) => {
+                        // group by productId and sum quantities
+                        if (map.has(dto.productId)) {
+                            map.get(dto.productId).quantity += dto.quantity;
+                        } else {
+                            map.set(dto.productId, dto);
+                        }
+                        return map;
+                    }, new Map<number, CreateOrderDetailsDto>())
+                    .values(),
+                async p => await this.mapDtoToOrderDetails(p)
+            )
         );
 
         return await this.orderRepo.save(order);
