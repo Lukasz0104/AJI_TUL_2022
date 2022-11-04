@@ -7,9 +7,8 @@ import {
     IsPhoneNumber,
     IsString
 } from 'class-validator';
-import { OrderDetails } from '../entities/order-details.entity';
-import { Order } from '../entities/order.entity';
 import { OrderStatus } from '../order-status.enum';
+import { CreateOrderDetailsDto } from './create-order-details.dto';
 
 export class CreateOrderDto {
     @Optional()
@@ -29,18 +28,5 @@ export class CreateOrderDto {
     phoneNumber: string;
 
     @ArrayMinSize(1)
-    products: OrderDetails[];
-
-    mapToOrder(): Order {
-        const order: Order = new Order();
-
-        order.acceptDate = this.acceptDate;
-        order.status = this.status;
-        order.username = this.username;
-        order.emailAddress = this.emailAddress;
-        order.phoneNumber = this.phoneNumber;
-        order.products = this.products;
-
-        return order;
-    }
+    products: CreateOrderDetailsDto[];
 }

@@ -1,27 +1,31 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Product } from 'src/product/entities/product.entity';
+import { Repository } from 'typeorm';
+import { CreateOrderDetailsDto } from './dto/create-order-details.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
+import { OrderDetails } from './entities/order-details.entity';
 import { Order } from './entities/order.entity';
 
 @Injectable()
 export class OrderService {
-    private orders: Map<number, Order> = new Map();
+    constructor(
+        @InjectRepository(Order) private orderRepo: Repository<Order>,
+        @InjectRepository(Product) private productRepo: Repository<Product>
+    ) {}
 
-    create(createOrderDto: CreateOrderDto): Order {
-        const order: Order = createOrderDto.mapToOrder();
-        const id = Math.max(0, ...this.orders.keys()) + 1;
-        order.id = id;
-        this.orders.set(id, order);
-
-        return order;
+    async create(createOrderDto: CreateOrderDto): Promise<Order> {
+        const order: Order = await this.mapDtoToOrder(createOrderDto);
+        return await this.orderRepo.save(order);
     }
 
-    findAll(): Order[] {
-        return Array.from(this.orders.values());
+    async findAll(): Promise<Order[]> {
+        return await this.orderRepo.find();
     }
 
-    findOne(id: number): Order {
-        const order = this.orders.get(id);
+    async findOne(id: number): Promise<Order> {
+        const order = this.orderRepo.findOneBy({ id: id });
 
         if (undefined === order) {
             throw new NotFoundException();
@@ -30,8 +34,8 @@ export class OrderService {
         return order;
     }
 
-    update(id: number, dto: UpdateOrderDto): Order {
-        const order: Order = this.orders.get(id);
+    async update(id: number, dto: UpdateOrderDto): Promise<Order> {
+        const order: Order = await this.orderRepo.findOneBy({ id: id });
 
         if (undefined === order) {
             throw new NotFoundException();
@@ -42,14 +46,37 @@ export class OrderService {
         order.username = dto.username ?? order.username;
         order.emailAddress = dto.emailAddress ?? order.emailAddress;
         order.phoneNumber = dto.phoneNumber ?? order.phoneNumber;
-        order.products = dto.products ?? order.products;
 
-        this.orders.set(id, order);
-
-        return order;
+        return await this.orderRepo.save(order);
     }
 
-    remove(id: number) {
-        this.orders.delete(id);
+    async remove(id: number) {
+        await this.orderRepo.delete({ id: id });
+    }
+
+    private async mapDtoToOrder(dto: CreateOrderDto): Promise<Order> {
+        const order = new Order();
+
+        order.acceptDate = dto.acceptDate;
+        order.emailAddress = dto.emailAddress;
+        order.phoneNumber = dto.phoneNumber;
+        order.status = dto.status;
+        order.username = dto.username;
+
+        order.products = await Promise.all(
+            dto.products.map(async p => await this.mapDtoToOrderDetails(p)) // TODO group by productId
+        );
+
+        return await this.orderRepo.save(order);
+    }
+
+    private async mapDtoToOrderDetails(
+        dto: CreateOrderDetailsDto
+    ): Promise<OrderDetails> {
+        const product = await this.productRepo.findOneBy({ id: dto.productId }); // TODO check if product is not null
+        const orderDetails = new OrderDetails();
+        orderDetails.quantity = dto.quantity;
+        orderDetails.product = product;
+        return orderDetails;
     }
 }

@@ -22,31 +22,31 @@ export class OrderController {
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    create(@Body() createOrderDto: CreateOrderDto): Order {
-        return this.orderService.create(createOrderDto);
+    async create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
+        return await this.orderService.create(createOrderDto);
     }
 
     @Get()
-    findAll(): Order[] {
+    async findAll(): Promise<Order[]> {
         return this.orderService.findAll();
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string): Order {
+    async findOne(@Param('id') id: string): Promise<Order> {
         return this.orderService.findOne(+id);
     }
 
     @Patch(':id')
-    update(
+    async update(
         @Param('id') id: string,
         @Body() updateOrderDto: UpdateOrderDto
-    ): Order {
+    ): Promise<Order> {
         return this.orderService.update(+id, updateOrderDto);
     }
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    remove(@Param('id') id: string) {
+    async remove(@Param('id') id: string): Promise<void> {
         return this.orderService.remove(+id);
     }
 }
