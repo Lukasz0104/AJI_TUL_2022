@@ -7,9 +7,17 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderDetails } from './entities/order-details.entity';
 import { Order } from './entities/order.entity';
+import { OrderStatus } from './order-status.enum';
 
 @Injectable()
 export class OrderService {
+    private readonly statuses = [
+        OrderStatus.UNAPPROVED,
+        OrderStatus.APPROVED,
+        OrderStatus.COMPLETED,
+        OrderStatus.CANCELLED
+    ];
+
     constructor(
         @InjectRepository(Order) private orderRepo: Repository<Order>,
         @InjectRepository(Product) private productRepo: Repository<Product>
@@ -42,7 +50,6 @@ export class OrderService {
         }
 
         order.acceptDate = dto.acceptDate ?? order.acceptDate;
-        order.status = dto.status ?? order.status;
         order.username = dto.username ?? order.username;
         order.emailAddress = dto.emailAddress ?? order.emailAddress;
         order.phoneNumber = dto.phoneNumber ?? order.phoneNumber;
@@ -92,4 +99,10 @@ export class OrderService {
         orderDetails.product = product;
         return orderDetails;
     }
+
+    // private compareStatus(s1: OrderStatus, s2: OrderStatus): number {
+    //     const index1 = this.statuses.indexOf(s1);
+    //     const index2 = this.statuses.indexOf(s2);
+    //     return index1 - index2;
+    // }
 }
