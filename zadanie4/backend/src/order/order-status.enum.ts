@@ -1,6 +1,6 @@
 export enum OrderStatus {
-    UNAPPROVED = 0,
-    APPROVED = 1,
-    CANCELLED = 2,
-    COMPLETED = 3
+    UNAPPROVED = 'UNAPPROVED',
+    APPROVED = 'APPROVED',
+    COMPLETED = 'COMPLETED',
+    CANCELLED = 'CANCELLED'
 }

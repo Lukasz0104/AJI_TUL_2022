@@ -14,6 +14,7 @@ import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
 import { ApiTags } from '@nestjs/swagger';
+import { OrderStatus } from './order-status.enum';
 
 @Controller('orders')
 @ApiTags('Orders')
@@ -29,6 +30,16 @@ export class OrderController {
     @Get()
     async findAll(): Promise<Order[]> {
         return this.orderService.findAll();
+    }
+
+    @Get('/status')
+    findStatuses(): OrderStatus[] {
+        return [
+            OrderStatus.UNAPPROVED,
+            OrderStatus.APPROVED,
+            OrderStatus.COMPLETED,
+            OrderStatus.CANCELLED
+        ];
     }
 
     @Get(':id')
