@@ -7,7 +7,8 @@ import {
     Param,
     Delete,
     HttpCode,
-    HttpStatus
+    HttpStatus,
+    Put
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -29,7 +30,7 @@ export class OrderController {
 
     @Get()
     async findAll(): Promise<Order[]> {
-        return this.orderService.findAll();
+        return await this.orderService.findAll();
     }
 
     @Get('/status')
@@ -44,7 +45,7 @@ export class OrderController {
 
     @Get(':id')
     async findOne(@Param('id') id: string): Promise<Order> {
-        return this.orderService.findOne(+id);
+        return await this.orderService.findOne(+id);
     }
 
     @Patch(':id')
@@ -52,12 +53,30 @@ export class OrderController {
         @Param('id') id: string,
         @Body() updateOrderDto: UpdateOrderDto
     ): Promise<Order> {
-        return this.orderService.update(+id, updateOrderDto);
+        return await this.orderService.update(+id, updateOrderDto);
     }
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     async remove(@Param('id') id: string): Promise<void> {
-        return this.orderService.remove(+id);
+        await this.orderService.remove(+id);
+    }
+
+    @Put(':id/approve')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async approveOrder(@Param('id') id: string): Promise<void> {
+        await this.orderService.changeOrderStatus(+id, OrderStatus.APPROVED);
+    }
+
+    @Put(':id/complete')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async completeOrder(@Param('id') id: string) {
+        await this.orderService.changeOrderStatus(+id, OrderStatus.COMPLETED);
+    }
+
+    @Put(':id/cancel')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    async cancelOrder(@Param('id') id: string) {
+        await this.orderService.changeOrderStatus(+id, OrderStatus.CANCELLED);
     }
 }

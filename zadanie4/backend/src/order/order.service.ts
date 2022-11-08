@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/product/entities/product.entity';
 import { Repository } from 'typeorm';
@@ -33,9 +37,9 @@ export class OrderService {
     }
 
     async findOne(id: number): Promise<Order> {
-        const order = this.orderRepo.findOneBy({ id: id });
+        const order = await this.orderRepo.findOneBy({ id: id });
 
-        if (undefined === order) {
+        if (null === order) {
             throw new NotFoundException();
         }
 
@@ -45,7 +49,7 @@ export class OrderService {
     async update(id: number, dto: UpdateOrderDto): Promise<Order> {
         const order: Order = await this.orderRepo.findOneBy({ id: id });
 
-        if (undefined === order) {
+        if (null === order) {
             throw new NotFoundException();
         }
 
@@ -104,9 +108,37 @@ export class OrderService {
         return orderDetails;
     }
 
-    // private compareStatus(s1: OrderStatus, s2: OrderStatus): number {
-    //     const index1 = this.statuses.indexOf(s1);
-    //     const index2 = this.statuses.indexOf(s2);
-    //     return index1 - index2;
-    // }
+    private compareStatus(s1: OrderStatus, s2: OrderStatus): number {
+        const index1 = this.statuses.indexOf(s1);
+        const index2 = this.statuses.indexOf(s2);
+        return index1 - index2;
+    }
+
+    async changeOrderStatus(id: number, status: OrderStatus): Promise<void> {
+        const order = await this.orderRepo.findOneBy({ id: id });
+
+        if (!order) {
+            throw new NotFoundException(`Order with id=${id} does not exist!`);
+        }
+
+        if (order.status == OrderStatus.CANCELLED) {
+            throw new BadRequestException(
+                'Cannot change status of a cancelled order!'
+            );
+        }
+
+        if (
+            order.status == OrderStatus.COMPLETED &&
+            status == OrderStatus.CANCELLED
+        ) {
+            throw new BadRequestException('Cannot cancel a completed order');
+        }
+
+        if (this.compareStatus(order.status, status) > 0) {
+            throw new BadRequestException('Cannot change status backwards!');
+        }
+
+        order.status = status;
+        await this.orderRepo.update({ id: id }, order);
+    }
 }
