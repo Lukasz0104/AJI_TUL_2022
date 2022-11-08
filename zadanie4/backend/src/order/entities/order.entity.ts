@@ -1,6 +1,4 @@
-import { Optional } from '@nestjs/common';
 import {
-    IsDateString,
     IsEmail,
     IsNotEmpty,
     IsNumber,
@@ -8,7 +6,13 @@ import {
     IsString,
     MinLength
 } from 'class-validator';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+    Column,
+    CreateDateColumn,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn
+} from 'typeorm';
 import { OrderStatus } from '../order-status.enum';
 import { OrderDetails } from './order-details.entity';
 
@@ -18,12 +22,12 @@ export class Order {
     @IsNumber()
     id: number;
 
-    @Optional()
-    @IsDateString()
-    @Column()
+    @CreateDateColumn()
     acceptDate: Date;
 
-    @Column()
+    @Column({
+        default: OrderStatus.UNAPPROVED
+    })
     status: OrderStatus;
 
     @IsString()

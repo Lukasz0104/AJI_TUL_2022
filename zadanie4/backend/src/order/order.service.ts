@@ -49,7 +49,6 @@ export class OrderService {
             throw new NotFoundException();
         }
 
-        order.acceptDate = dto.acceptDate ?? order.acceptDate;
         order.username = dto.username ?? order.username;
         order.emailAddress = dto.emailAddress ?? order.emailAddress;
         order.phoneNumber = dto.phoneNumber ?? order.phoneNumber;
@@ -64,10 +63,8 @@ export class OrderService {
     private async mapDtoToOrder(dto: CreateOrderDto): Promise<Order> {
         const order = new Order();
 
-        order.acceptDate = dto.acceptDate;
         order.emailAddress = dto.emailAddress;
         order.phoneNumber = dto.phoneNumber;
-        order.status = dto.status;
         order.username = dto.username;
 
         order.products = await Promise.all(
@@ -93,7 +90,14 @@ export class OrderService {
     private async mapDtoToOrderDetails(
         dto: CreateOrderDetailsDto
     ): Promise<OrderDetails> {
-        const product = await this.productRepo.findOneBy({ id: dto.productId }); // TODO check if product is not null
+        const product = await this.productRepo.findOneBy({ id: dto.productId });
+
+        if (product === null) {
+            throw new NotFoundException(
+                `Product with id=${dto.productId} does not exist!`
+            );
+        }
+
         const orderDetails = new OrderDetails();
         orderDetails.quantity = dto.quantity;
         orderDetails.product = product;
