@@ -1,6 +1,6 @@
 import { IsNumber } from 'class-validator';
-import { Product } from 'src/product/entities/product.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Product } from '../../product/entities/product.entity';
 import { Order } from './order.entity';
 
 @Entity()

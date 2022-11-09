@@ -1,8 +1,8 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from 'src/category/entities/category.entity';
-import { Product } from 'src/product/entities/product.entity';
 import { Repository } from 'typeorm';
+import { Category } from '../category/entities/category.entity';
+import { Product } from '../product/entities/product.entity';
 
 @Injectable()
 export class DbInitService implements OnApplicationBootstrap {

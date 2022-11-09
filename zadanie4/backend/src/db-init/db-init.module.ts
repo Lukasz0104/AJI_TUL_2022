@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Category } from 'src/category/entities/category.entity';
-import { OrderDetails } from 'src/order/entities/order-details.entity';
-import { Order } from 'src/order/entities/order.entity';
-import { Product } from 'src/product/entities/product.entity';
+import { Category } from '../category/entities/category.entity';
+import { OrderDetails } from '../order/entities/order-details.entity';
+import { Order } from '../order/entities/order.entity';
+import { Product } from '../product/entities/product.entity';
 import { DbInitService } from './db-init.service';
 
 @Module({

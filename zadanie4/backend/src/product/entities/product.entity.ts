@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsPositive } from 'class-validator';
-import { Category } from 'src/category/entities/category.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Category } from '../../category/entities/category.entity';
 
 @Entity()
 export class Product {
