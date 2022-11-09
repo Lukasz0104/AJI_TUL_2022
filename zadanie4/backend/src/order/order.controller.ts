@@ -1,21 +1,22 @@
 import {
-    Controller,
-    Get,
-    Post,
     Body,
-    Patch,
-    Param,
+    Controller,
     Delete,
+    Get,
     HttpCode,
     HttpStatus,
-    Put
+    Param,
+    Patch,
+    Post,
+    Put,
+    Query
 } from '@nestjs/common';
-import { OrderService } from './order.service';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
-import { ApiTags } from '@nestjs/swagger';
 import { OrderStatus } from './order-status.enum';
+import { OrderService } from './order.service';
 
 @Controller('orders')
 @ApiTags('Orders')
@@ -28,9 +29,14 @@ export class OrderController {
         return await this.orderService.create(createOrderDto);
     }
 
+    @ApiQuery({
+        name: 'status',
+        required: false,
+        enum: OrderStatus
+    })
     @Get()
-    async findAll(): Promise<Order[]> {
-        return await this.orderService.findAll();
+    async findAll(@Query('status') status?: OrderStatus): Promise<Order[]> {
+        return await this.orderService.findAll(status);
     }
 
     @Get('/status')

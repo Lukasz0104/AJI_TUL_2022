@@ -32,8 +32,12 @@ export class OrderService {
         return await this.orderRepo.save(order);
     }
 
-    async findAll(): Promise<Order[]> {
-        return await this.orderRepo.find();
+    async findAll(status?: OrderStatus): Promise<Order[]> {
+        if (status) {
+            return await this.orderRepo.findBy({ status: status });
+        } else {
+            return await this.orderRepo.find();
+        }
     }
 
     async findOne(id: number): Promise<Order> {
