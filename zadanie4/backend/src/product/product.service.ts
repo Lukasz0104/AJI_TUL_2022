@@ -25,7 +25,7 @@ export class ProductService {
     async findOne(id: number): Promise<Product> {
         const p = await this.productRepo.findOneBy({ id: id });
 
-        if (null === p) {
+        if (!p) {
             throw new NotFoundException();
         }
         return p;
@@ -37,7 +37,7 @@ export class ProductService {
     ): Promise<Product> {
         const p = await this.productRepo.findOneBy({ id: id });
 
-        if (undefined === p) {
+        if (!p) {
             throw new NotFoundException();
         }
 
@@ -57,6 +57,12 @@ export class ProductService {
         const category = await this.categoryRepo.findOneBy({
             id: dto.categoryId
         });
+
+        if (!category) {
+            throw new NotFoundException(
+                `Category with id=${dto.categoryId} does not exist!`
+            );
+        }
 
         return new Product(
             dto.name,

@@ -43,7 +43,7 @@ export class OrderService {
     async findOne(id: number): Promise<Order> {
         const order = await this.orderRepo.findOneBy({ id: id });
 
-        if (null === order) {
+        if (!order) {
             throw new NotFoundException();
         }
 
@@ -53,7 +53,7 @@ export class OrderService {
     async update(id: number, dto: UpdateOrderDto): Promise<Order> {
         const order: Order = await this.orderRepo.findOneBy({ id: id });
 
-        if (null === order) {
+        if (!order) {
             throw new NotFoundException();
         }
 
@@ -100,7 +100,7 @@ export class OrderService {
     ): Promise<OrderDetails> {
         const product = await this.productRepo.findOneBy({ id: dto.productId });
 
-        if (product === null) {
+        if (!product) {
             throw new NotFoundException(
                 `Product with id=${dto.productId} does not exist!`
             );
@@ -132,8 +132,8 @@ export class OrderService {
         }
 
         if (
-            order.status == OrderStatus.COMPLETED &&
-            status == OrderStatus.CANCELLED
+            order.status === OrderStatus.COMPLETED &&
+            status === OrderStatus.CANCELLED
         ) {
             throw new BadRequestException('Cannot cancel a completed order');
         }
