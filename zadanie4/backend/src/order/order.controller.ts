@@ -1,7 +1,6 @@
 import {
     Body,
     Controller,
-    Delete,
     Get,
     HttpCode,
     HttpStatus,
@@ -60,12 +59,6 @@ export class OrderController {
         @Body() updateOrderDto: UpdateOrderDto
     ): Promise<Order> {
         return await this.orderService.update(+id, updateOrderDto);
-    }
-
-    @Delete(':id')
-    @HttpCode(HttpStatus.NO_CONTENT)
-    async remove(@Param('id') id: string): Promise<void> {
-        await this.orderService.remove(+id);
     }
 
     @Put(':id/approve')

@@ -64,10 +64,6 @@ export class OrderService {
         return await this.orderRepo.save(order);
     }
 
-    async remove(id: number) {
-        await this.orderRepo.delete({ id: id });
-    }
-
     private async mapDtoToOrder(dto: CreateOrderDto): Promise<Order> {
         const order = new Order();
 

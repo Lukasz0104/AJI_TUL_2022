@@ -49,10 +49,6 @@ export class ProductService {
         return this.productRepo.save(p);
     }
 
-    async remove(id: number): Promise<void> {
-        await this.productRepo.delete({ id: id });
-    }
-
     private async mapDtoToProduct(dto: CreateProductDto): Promise<Product> {
         const category = await this.categoryRepo.findOneBy({
             id: dto.categoryId
