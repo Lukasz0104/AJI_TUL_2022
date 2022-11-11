@@ -27,6 +27,10 @@ export class OrderService {
         @InjectRepository(Product) private productRepo: Repository<Product>
     ) {}
 
+    getAllPossibleStatuses(): OrderStatus[] {
+        return this.statuses;
+    }
+
     async create(createOrderDto: CreateOrderDto): Promise<Order> {
         const order: Order = await this.mapDtoToOrder(createOrderDto);
         return await this.orderRepo.save(order);
@@ -114,7 +118,7 @@ export class OrderService {
         return index1 - index2;
     }
 
-    async changeOrderStatus(id: number, status: OrderStatus): Promise<void> {
+    async changeOrderStatus(id: number, status: OrderStatus): Promise<Order> {
         const order = await this.orderRepo.findOneBy({ id: id });
 
         if (!order) {
@@ -140,5 +144,6 @@ export class OrderService {
 
         order.status = status;
         await this.orderRepo.update({ id: id }, order);
+        return order;
     }
 }

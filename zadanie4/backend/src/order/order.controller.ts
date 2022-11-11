@@ -40,12 +40,7 @@ export class OrderController {
 
     @Get('/status')
     findStatuses(): OrderStatus[] {
-        return [
-            OrderStatus.UNAPPROVED,
-            OrderStatus.APPROVED,
-            OrderStatus.COMPLETED,
-            OrderStatus.CANCELLED
-        ];
+        return this.orderService.getAllPossibleStatuses();
     }
 
     @Get(':id')
@@ -62,20 +57,26 @@ export class OrderController {
     }
 
     @Put(':id/approve')
-    @HttpCode(HttpStatus.NO_CONTENT)
-    async approveOrder(@Param('id') id: string): Promise<void> {
-        await this.orderService.changeOrderStatus(+id, OrderStatus.APPROVED);
+    async approveOrder(@Param('id') id: string): Promise<Order> {
+        return await this.orderService.changeOrderStatus(
+            +id,
+            OrderStatus.APPROVED
+        );
     }
 
     @Put(':id/complete')
-    @HttpCode(HttpStatus.NO_CONTENT)
-    async completeOrder(@Param('id') id: string) {
-        await this.orderService.changeOrderStatus(+id, OrderStatus.COMPLETED);
+    async completeOrder(@Param('id') id: string): Promise<Order> {
+        return await this.orderService.changeOrderStatus(
+            +id,
+            OrderStatus.COMPLETED
+        );
     }
 
     @Put(':id/cancel')
-    @HttpCode(HttpStatus.NO_CONTENT)
-    async cancelOrder(@Param('id') id: string) {
-        await this.orderService.changeOrderStatus(+id, OrderStatus.CANCELLED);
+    async cancelOrder(@Param('id') id: string): Promise<Order> {
+        return await this.orderService.changeOrderStatus(
+            +id,
+            OrderStatus.CANCELLED
+        );
     }
 }
