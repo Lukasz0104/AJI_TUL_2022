@@ -13,10 +13,15 @@ async function bootstrap() {
 
     const swaggerConfig = new DocumentBuilder()
         .setTitle('Products API')
+        .addBearerAuth()
         .build();
 
     const document = SwaggerModule.createDocument(app, swaggerConfig);
-    SwaggerModule.setup('swagger', app, document);
+    SwaggerModule.setup('swagger', app, document, {
+        swaggerOptions: {
+            tagsSorter: 'alpha'
+        }
+    });
 
     await app.listen(3000);
 }
