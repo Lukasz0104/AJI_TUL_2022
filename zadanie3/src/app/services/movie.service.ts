@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { each, filter, includes, map, some, take, takeRight } from 'lodash-es';
-import { Subject } from 'rxjs';
+import { catchError, retry, Subject } from 'rxjs';
 import { FilterParams } from '../filter-params';
 import { Movie } from '../movie';
 
@@ -10,14 +10,23 @@ import { Movie } from '../movie';
 })
 export class MovieService
 {
-    movies: Movie[] = [];
+    private readonly GITHUB_URL = 'https://raw.githubusercontent.com/prust/wikipedia-movie-data/master/movies.json';
+    private readonly FALLBACK_URL = './assets/movies.json';
+
+    private movies: Movie[] = [];
     private last100Movies: Movie[] = [];
 
     public notify$ = new Subject<void>();
 
     constructor(private http: HttpClient)
     {
-        this.http.get<Movie[]>("https://raw.githubusercontent.com/prust/wikipedia-movie-data/master/movies.json")
+        this.http.get<Movie[]>(this.GITHUB_URL)
+            .pipe(
+                retry(2),
+                catchError(() =>
+                {
+                    return this.http.get<Movie[]>(this.FALLBACK_URL);
+                }))
             .subscribe(data =>
             {
                 this.movies = data;
