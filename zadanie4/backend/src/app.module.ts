@@ -10,7 +10,9 @@ import { UserModule } from './user/user.module';
 
 @Module({
     imports: [
-        ConfigModule.forRoot(),
+        ConfigModule.forRoot({
+            isGlobal: true
+        }),
         TypeOrmModule.forRoot({
             type: 'sqlite',
             database: 'productsdb.sqlite',
