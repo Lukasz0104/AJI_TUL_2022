@@ -5,8 +5,7 @@ import { MovieService } from 'src/app/services/movie.service';
 
 @Component({
     selector: 'app-movies-table',
-    templateUrl: './movies-table.component.html',
-    styleUrls: ['./movies-table.component.css']
+    templateUrl: './movies-table.component.html'
 })
 export class MoviesTableComponent implements OnInit, OnChanges
 {

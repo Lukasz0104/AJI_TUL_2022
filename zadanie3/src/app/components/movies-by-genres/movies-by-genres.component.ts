@@ -3,8 +3,7 @@ import { MovieService } from 'src/app/services/movie.service';
 
 @Component({
     selector: 'app-movies-by-genres',
-    templateUrl: './movies-by-genres.component.html',
-    styleUrls: ['./movies-by-genres.component.css']
+    templateUrl: './movies-by-genres.component.html'
 })
 export class MoviesByGenresComponent implements OnInit
 {
