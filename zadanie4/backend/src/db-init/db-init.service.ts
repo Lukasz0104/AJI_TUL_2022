@@ -1,4 +1,5 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
@@ -10,6 +11,7 @@ import { Role } from '../user/role.enum';
 @Injectable()
 export class DbInitService implements OnApplicationBootstrap {
     constructor(
+        private configService: ConfigService,
         @InjectRepository(Product) private productRepo: Repository<Product>,
         @InjectRepository(Category) private categoryRepo: Repository<Category>,
         @InjectRepository(User) private userRepo: Repository<User>
@@ -44,12 +46,14 @@ export class DbInitService implements OnApplicationBootstrap {
         await this.productRepo.insert(products);
 
         console.log('Adding admin account to the database');
-        const salt = await genSalt(10);
         const admin = new User();
-        admin.username = process.env.ADMIN_USERNAME;
-        admin.password = await hash(process.env.ADMIN_PASSWORD, salt);
-        admin.emailAddress = process.env.ADMIN_EMAIL;
-        admin.phoneNumber = '000000000';
+        admin.username = this.configService.get('ADMIN_USERNAME');
+        admin.password = await hash(
+            this.configService.get('ADMIN_PASSWORD'),
+            await genSalt(10)
+        );
+        admin.emailAddress = this.configService.get('ADMIN_EMAIL');
+        admin.phoneNumber = this.configService.get('ADMIN_PHONE_NUMBER');
         admin.role = Role.ADMIN;
 
         await this.userRepo.save(admin);
