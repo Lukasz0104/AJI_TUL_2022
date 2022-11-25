@@ -1,4 +1,4 @@
-import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { genSalt, hash } from 'bcrypt';
@@ -10,6 +10,8 @@ import { Role } from '../user/role.enum';
 
 @Injectable()
 export class DbInitService implements OnApplicationBootstrap {
+    private readonly logger = new Logger(DbInitService.name);
+
     constructor(
         private configService: ConfigService,
         @InjectRepository(Product) private productRepo: Repository<Product>,
@@ -18,22 +20,31 @@ export class DbInitService implements OnApplicationBootstrap {
     ) {}
 
     async onApplicationBootstrap() {
-        console.log('Seeding Database with data');
-        console.log('Seeding categories...');
+        this.logger.debug('Seeding database with data');
 
-        const categories = [
+        this.logger.debug('Seeding categories...');
+        const categories = await this.seedCategories();
+
+        this.logger.debug('Seeding products...');
+        await this.seedProducts(categories);
+
+        this.logger.debug('Seeding accounts...');
+        await this.seedAccounts();
+    }
+
+    private async seedCategories() {
+        return await this.categoryRepo.save([
             new Category('Food and drinks'),
             new Category('Books'),
             new Category('Sport equipment'),
             new Category('Furniture'),
             new Category('Clothing'),
             new Category('Toys')
-        ];
+        ]);
+    }
 
-        await this.categoryRepo.save(categories);
-
-        console.log('Seeding products...');
-        const products = [
+    private async seedProducts(categories: Category[]) {
+        return await this.productRepo.insert([
             new Product(
                 'Bottle of water',
                 '500 ml, sparkling',
@@ -41,21 +52,34 @@ export class DbInitService implements OnApplicationBootstrap {
                 0.5,
                 categories[0]
             )
-        ];
+        ]);
+    }
 
-        await this.productRepo.insert(products);
-
-        console.log('Adding admin account to the database');
+    private async seedAccounts() {
+        this.logger.debug('Adding admin account to the database');
+        const salt = await genSalt(10);
         const admin = new User();
         admin.username = this.configService.get('ADMIN_USERNAME');
         admin.password = await hash(
             this.configService.get('ADMIN_PASSWORD'),
-            await genSalt(10)
+            salt
         );
         admin.emailAddress = this.configService.get('ADMIN_EMAIL');
         admin.phoneNumber = this.configService.get('ADMIN_PHONE_NUMBER');
         admin.role = Role.ADMIN;
 
         await this.userRepo.save(admin);
+
+        this.logger.debug('Adding client account to the database');
+        const client = new User();
+        client.username = this.configService.get('CLIENT_USERNAME');
+        client.password = await hash(
+            this.configService.get('CLIENT_PASSWORD'),
+            salt
+        );
+        client.phoneNumber = this.configService.get('CLIENT_PHONE_NUMBER');
+        client.emailAddress = this.configService.get('CLIENT_EMAIL');
+
+        await this.userRepo.save(client);
     }
 }
