@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { UserStrippedPassword } from '../auth/auth.service';
 import { Product } from '../product/entities/product.entity';
 import { CreateOrderDetailsDto } from './dto/create-order-details.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderDetails } from './entities/order-details.entity';
 import { Order } from './entities/order.entity';
 import { OrderStatus } from './order-status.enum';
@@ -31,8 +31,16 @@ export class OrderService {
         return this.statuses;
     }
 
-    async create(createOrderDto: CreateOrderDto): Promise<Order> {
+    async create(
+        user: UserStrippedPassword,
+        createOrderDto: CreateOrderDto
+    ): Promise<Order> {
         const order: Order = await this.mapDtoToOrder(createOrderDto);
+
+        order.emailAddress = user.emailAddress;
+        order.phoneNumber = user.phoneNumber;
+        order.username = user.username;
+
         return await this.orderRepo.save(order);
     }
 
@@ -54,27 +62,8 @@ export class OrderService {
         return order;
     }
 
-    async update(id: number, dto: UpdateOrderDto): Promise<Order> {
-        const order: Order = await this.orderRepo.findOneBy({ id: id });
-
-        if (!order) {
-            throw new NotFoundException();
-        }
-
-        order.username = dto.username ?? order.username;
-        order.emailAddress = dto.emailAddress ?? order.emailAddress;
-        order.phoneNumber = dto.phoneNumber ?? order.phoneNumber;
-
-        return await this.orderRepo.save(order);
-    }
-
     private async mapDtoToOrder(dto: CreateOrderDto): Promise<Order> {
         const order = new Order();
-
-        order.emailAddress = dto.emailAddress;
-        order.phoneNumber = dto.phoneNumber;
-        order.username = dto.username;
-
         order.products = await Promise.all(
             Array.from(
                 dto.products
@@ -92,7 +81,7 @@ export class OrderService {
             )
         );
 
-        return await this.orderRepo.save(order);
+        return order;
     }
 
     private async mapDtoToOrderDetails(
