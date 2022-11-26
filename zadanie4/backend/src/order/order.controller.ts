@@ -7,20 +7,17 @@ import {
     Param,
     Post,
     Put,
-    Query,
-    Request
+    Query
 } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AdminRoute } from '../auth/admin-route.decorator';
 import { UserStrippedPassword } from '../auth/auth.service';
+import { CurrentUser } from '../auth/current-user.decorator';
 import { UserRoute } from '../auth/user-route.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entities/order.entity';
 import { OrderStatus } from './order-status.enum';
 import { OrderService } from './order.service';
-
-// TODO create custom decorator to get user from request
-type RequestWithUser = Request & { user: UserStrippedPassword };
 
 @Controller('orders')
 @ApiTags('Orders')
@@ -31,10 +28,10 @@ export class OrderController {
     @HttpCode(HttpStatus.CREATED)
     @UserRoute()
     async create(
-        @Request() req: RequestWithUser,
+        @CurrentUser() user: UserStrippedPassword,
         @Body() createOrderDto: CreateOrderDto
     ): Promise<Order> {
-        return await this.orderService.create(req.user, createOrderDto);
+        return await this.orderService.create(user, createOrderDto);
     }
 
     @ApiQuery({
