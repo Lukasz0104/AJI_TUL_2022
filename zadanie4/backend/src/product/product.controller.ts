@@ -5,15 +5,11 @@ import {
     Param,
     Patch,
     Post,
-    UseGuards,
     UsePipes,
     ValidationPipe
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RequiredRole } from '../auth/required-role.decorator';
-import { RoleGuard } from '../auth/role.guard';
-import { Role } from '../user/role.enum';
+import { ApiTags } from '@nestjs/swagger';
+import { AdminRoute } from '../auth/admin-route.decorator';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
@@ -36,17 +32,13 @@ export class ProductController {
 
     @Post()
     @UsePipes(ValidationPipe)
-    @UseGuards(JwtAuthGuard, RoleGuard)
-    @RequiredRole(Role.ADMIN)
-    @ApiBearerAuth()
+    @AdminRoute()
     create(@Body() createProductDto: CreateProductDto): Promise<Product> {
         return this.productService.create(createProductDto);
     }
 
     @Patch(':id')
-    @UseGuards(JwtAuthGuard, RoleGuard)
-    @RequiredRole(Role.ADMIN)
-    @ApiBearerAuth()
+    @AdminRoute()
     update(
         @Param('id') id: string,
         @Body() updateProductDto: UpdateProductDto

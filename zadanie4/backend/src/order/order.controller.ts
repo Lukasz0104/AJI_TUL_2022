@@ -8,14 +8,11 @@ import {
     Patch,
     Post,
     Put,
-    Query,
-    UseGuards
+    Query
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { RequiredRole } from '../auth/required-role.decorator';
-import { RoleGuard } from '../auth/role.guard';
-import { Role } from '../user/role.enum';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { AdminRoute } from '../auth/admin-route.decorator';
+import { UserRoute } from '../auth/user-route.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './entities/order.entity';
@@ -24,14 +21,12 @@ import { OrderService } from './order.service';
 
 @Controller('orders')
 @ApiTags('Orders')
-@UseGuards(JwtAuthGuard, RoleGuard)
 export class OrderController {
     constructor(private readonly orderService: OrderService) {}
 
     @Post()
     @HttpCode(HttpStatus.CREATED)
-    @RequiredRole(Role.USER)
-    @ApiBearerAuth()
+    @UserRoute()
     async create(@Body() createOrderDto: CreateOrderDto): Promise<Order> {
         return await this.orderService.create(createOrderDto);
     }
@@ -42,29 +37,25 @@ export class OrderController {
         enum: OrderStatus
     })
     @Get()
-    @RequiredRole(Role.ADMIN)
-    @ApiBearerAuth()
+    @AdminRoute()
     async findAll(@Query('status') status?: OrderStatus): Promise<Order[]> {
         return await this.orderService.findAll(status);
     }
 
     @Get('/status')
-    @RequiredRole(Role.ADMIN)
-    @ApiBearerAuth()
+    @AdminRoute()
     findStatuses(): OrderStatus[] {
         return this.orderService.getAllPossibleStatuses();
     }
 
     @Get(':id')
-    @RequiredRole(Role.ADMIN)
-    @ApiBearerAuth()
+    @AdminRoute()
     async findOne(@Param('id') id: string): Promise<Order> {
         return await this.orderService.findOne(+id);
     }
 
     @Patch(':id')
-    @RequiredRole(Role.ADMIN)
-    @ApiBearerAuth()
+    @AdminRoute()
     async update(
         @Param('id') id: string,
         @Body() updateOrderDto: UpdateOrderDto
@@ -73,8 +64,7 @@ export class OrderController {
     }
 
     @Put(':id/approve')
-    @RequiredRole(Role.ADMIN)
-    @ApiBearerAuth()
+    @AdminRoute()
     async approveOrder(@Param('id') id: string): Promise<Order> {
         return await this.orderService.changeOrderStatus(
             +id,
@@ -83,8 +73,7 @@ export class OrderController {
     }
 
     @Put(':id/complete')
-    @RequiredRole(Role.ADMIN)
-    @ApiBearerAuth()
+    @AdminRoute()
     async completeOrder(@Param('id') id: string): Promise<Order> {
         return await this.orderService.changeOrderStatus(
             +id,
@@ -93,8 +82,7 @@ export class OrderController {
     }
 
     @Put(':id/cancel')
-    @RequiredRole(Role.ADMIN)
-    @ApiBearerAuth()
+    @AdminRoute()
     async cancelOrder(@Param('id') id: string): Promise<Order> {
         return await this.orderService.changeOrderStatus(
             +id,
