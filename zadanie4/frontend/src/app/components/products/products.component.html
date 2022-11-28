@@ -1,0 +1,40 @@
+<ng-container *ngIf="products.length > 0; else elseBlock">
+    <div class="container container-xl">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="col col-1">#</th>
+                    <th class="col col-2">Name</th>
+                    <th class="col col-4">Description</th>
+                    <th class="col col-1">Price</th>
+                    <th class="col col-1">Weight</th>
+                    <th class="col col-2">Category</th>
+                    <th class="col col-2"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr *ngFor="let product of products; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.description }}</td>
+                    <td>{{ product.unitPrice }}</td>
+                    <td>{{ product.unitWeight }}</td>
+                    <td>{{ product.category.name }}</td>
+                    <td>
+                        <button class="btn btn-outline-primary">Action</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-container>
+<ng-template #elseBlock>
+    <div class="text-center my-3">
+        <h4>Fetching data, please wait...</h4>
+        <div
+            class="spinner-border text-primary mt-3"
+            role="status">
+            <span class="visually-hidden"></span>
+        </div>
+    </div>
+</ng-template>

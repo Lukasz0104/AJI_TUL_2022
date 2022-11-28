@@ -27,7 +27,9 @@ export class Product {
     @IsNumber()
     unitWeight: number;
 
-    @ManyToOne(() => Category)
+    @ManyToOne(() => Category, {
+        eager: true
+    })
     category: Category;
 
     constructor(

@@ -1,31 +1,28 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container container-xxl">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-                <a
-                    routerLink="/"
-                    class="nav-link">
-                    Home
-                </a>
-            </li>
             <li>
                 <a
-                    routerLink="/"
-                    class="nav-link">
+                    routerLink="/products"
+                    routerLinkActive="true"
+                    class="nav-link"
+                    [ngClass]="{ active: this.router.url === '/products' }">
                     Products
                 </a>
             </li>
             <li class="nav-item">
                 <a
                     routerLink="/"
-                    class="nav-link">
+                    class="nav-link"
+                    [ngClass]="{ active: this.router.url === '/' }">
                     Cart
                 </a>
             </li>
             <li class="nav-item">
                 <a
                     routerLink="/"
-                    class="nav-link">
+                    class="nav-link"
+                    [ngClass]="{ active: false }">
                     Orders
                 </a>
             </li>
