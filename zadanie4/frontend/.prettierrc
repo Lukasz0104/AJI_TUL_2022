@@ -3,9 +3,9 @@
     "trailingComma": "none",
     "tabWidth": 4,
     "useTabs": false,
-    "bracketSameLine": false,
     "semi": true,
     "bracketSpacing": true,
-    "bracketLine": true,
-    "singleAttributePerLine": true
+    "bracketSameLine": true,
+    "singleAttributePerLine": true,
+    "htmlWhitespaceSensitivity": "css"
 }
