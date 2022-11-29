@@ -1,25 +1,27 @@
 <ng-container *ngIf="products.length > 0; else elseBlock">
     <div class="container container-xl">
+        <app-products-filter (filtersChanged)="filterProducts($event)">
+        </app-products-filter>
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="col col-1">#</th>
-                    <th class="col col-2">Name</th>
-                    <th class="col col-4">Description</th>
-                    <th class="col col-1">Price</th>
-                    <th class="col col-1">Weight</th>
-                    <th class="col col-2">Category</th>
-                    <th class="col col-2"></th>
+                    <th class="col col-1 text-center">#</th>
+                    <th class="col col-2 text-center">Name</th>
+                    <th class="col col-4 text-center">Description</th>
+                    <th class="col col-1 text-center">Price</th>
+                    <th class="col col-1 text-center">Weight</th>
+                    <th class="col col-2 text-center">Category</th>
+                    <th class="col col-2 text-center"></th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
                 <tr *ngFor="let product of products; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ product.name }}</td>
+                    <td class="text-center">{{ i + 1 }}</td>
+                    <td class="text-center">{{ product.name }}</td>
                     <td>{{ product.description }}</td>
-                    <td>{{ product.unitPrice }}</td>
-                    <td>{{ product.unitWeight }}</td>
-                    <td>{{ product.category.name }}</td>
+                    <td class="text-center">{{ product.unitPrice }}</td>
+                    <td class="text-center">{{ product.unitWeight }}</td>
+                    <td class="text-center">{{ product.category.name }}</td>
                     <td>
                         <button class="btn btn-outline-primary">Action</button>
                     </td>

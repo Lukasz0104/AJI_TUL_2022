@@ -7,7 +7,7 @@ import { Product } from '../models/product';
 @Injectable({
     providedIn: 'root'
 })
-export class ProductsService {
+export class ProductService {
     private readonly PRODUCTS_URL = `${environment.apiUrl}/products`;
 
     constructor(private httpClient: HttpClient) {}
