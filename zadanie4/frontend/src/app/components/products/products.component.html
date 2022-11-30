@@ -5,13 +5,13 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th class="col col-1 text-center">#</th>
+                    <th class="col text-center">#</th>
                     <th class="col col-2 text-center">Name</th>
                     <th class="col col-4 text-center">Description</th>
-                    <th class="col col-1 text-center">Price</th>
-                    <th class="col col-1 text-center">Weight</th>
+                    <th class="col text-center">Price</th>
+                    <th class="col text-center">Weight</th>
                     <th class="col col-2 text-center">Category</th>
-                    <th class="col col-2 text-center"></th>
+                    <th class="col text-center"></th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -22,8 +22,13 @@
                     <td class="text-center">{{ product.unitPrice }}</td>
                     <td class="text-center">{{ product.unitWeight }}</td>
                     <td class="text-center">{{ product.category.name }}</td>
-                    <td>
-                        <button class="btn btn-outline-primary">Action</button>
+                    <td class="text-center">
+                        <button
+                            class="btn btn-outline-primary px-3"
+                            (click)="addToCart(i)">
+                            <i class="bi bi-cart-plus"></i>
+                            <span class="mx-2">Add to cart</span>
+                        </button>
                     </td>
                 </tr>
             </tbody>
