@@ -25,7 +25,7 @@
                     <td class="text-center">
                         <button
                             class="btn btn-outline-primary px-3"
-                            (click)="addToCart(i)">
+                            (click)="addToCart(product)">
                             <i class="bi bi-cart-plus"></i>
                             <span class="mx-2">Add to cart</span>
                         </button>
@@ -35,6 +35,7 @@
         </table>
     </div>
 </ng-container>
+
 <ng-template #elseBlock>
     <div class="text-center my-3">
         <h4>Fetching data, please wait...</h4>

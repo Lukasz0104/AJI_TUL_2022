@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fs-5">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fs-5 mb-3">
     <div class="container container-xxl">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li>
@@ -12,9 +12,9 @@
             </li>
             <li class="nav-item">
                 <a
-                    routerLink="/"
+                    routerLink="/cart"
                     class="nav-link"
-                    [ngClass]="{ active: this.router.url === '/' }">
+                    [ngClass]="{ active: this.router.url === '/cart' }">
                     Cart
                 </a>
             </li>
@@ -22,7 +22,7 @@
                 <a
                     routerLink="/"
                     class="nav-link"
-                    [ngClass]="{ active: false }">
+                    [ngClass]="{ active: this.router.url === '/' }">
                     Orders
                 </a>
             </li>
@@ -41,10 +41,10 @@
                         <a
                             routerLink="/cart"
                             class="nav-link d-inline">
-                            <i class="bi bi-cart4 position-relative px-1">
+                            <i class="bi bi-cart4 position-relative px-1 mt-1">
                                 <ng-container *ngIf="cartService.count > 0">
                                     <span
-                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger badge-text">
                                         {{ cartService.count }}
                                     </span>
                                 </ng-container>

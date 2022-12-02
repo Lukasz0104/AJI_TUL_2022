@@ -24,7 +24,7 @@ export class ProductsComponent implements OnInit {
         // TODO add filtering logic
     }
 
-    addToCart(id: number) {
-        this.cartService.addProduct(id);
+    addToCart(p: Product) {
+        this.cartService.addProduct(p.id, p);
     }
 }
