@@ -3,10 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { Product } from '../models/product';
 
-export interface ProductWithQuantity {
-    product: Product;
-    quantity: number;
-}
+export type ProductWithQuantity = Product & { quantity: number };
 
 @Injectable({
     providedIn: 'root'
@@ -30,7 +27,7 @@ export class CartService {
         let sum = 0;
 
         this.cart.forEach((pwq: ProductWithQuantity) => {
-            sum += pwq.quantity * pwq.product.unitPrice;
+            sum += pwq.quantity * pwq.unitPrice;
         });
 
         return sum;
@@ -43,7 +40,7 @@ export class CartService {
             pwq.quantity++;
             this._cart.set(id, pwq);
         } else {
-            this._cart.set(id, { product: p, quantity: 1 });
+            this._cart.set(id, Object.assign(p, { quantity: 1 }));
         }
     }
 
