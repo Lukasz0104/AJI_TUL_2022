@@ -37,6 +37,7 @@
                         (mouseenter)="p.open()"
                         [popoverTitle]="PopoverTitle"
                         autoClose="outside"
+                        popoverClass="popover-custom"
                         #p="ngbPopover">
                         <a
                             routerLink="/cart"
@@ -70,9 +71,9 @@
 </nav>
 
 <ng-template #PopoverTitle>
-    <span class="text-dark fw-bold w-100 fs-5">Cart</span>
+    <span class="text-dark fw-bold fs-5">Cart</span>
 </ng-template>
 
 <ng-template #PopoverContent>
-    <div class="d-inline md-0"></div>
+    <app-cart-popover></app-cart-popover>
 </ng-template>

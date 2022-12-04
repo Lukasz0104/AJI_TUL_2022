@@ -1,0 +1,51 @@
+<ng-container *ngIf="cartService.count > 0; else emptyCart">
+    <div>
+        <div
+            *ngFor="let item of cartService.cart | keyvalue; let i = index"
+            class="container px-0">
+            <div class="row">
+                <p class="fw-semibold mb-0 fs-6">
+                    {{ i + 1 }}. {{ item.value.name }}
+                </p>
+            </div>
+            <div class="row align-items-center justify-content-between">
+                <div class="col col-8 text-begin flex-grow">
+                    <button
+                        class="btn btn-danger px-1 py-0"
+                        (click)="decrement(item.key)">
+                        <i class="bi bi-dash-lg"></i>
+                    </button>
+                    <span class="d-inline-block w-25 text-center">
+                        {{ item.value.quantity }}
+                    </span>
+                    <button
+                        class="btn btn-success px-1 py-0"
+                        (click)="increment(item.key, item.value)">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </div>
+                <div class="col col-4">
+                    <p class="text-end mb-0">
+                        {{ item.value.unitPrice | number : '1.2-2' }}
+                    </p>
+                </div>
+            </div>
+            <hr class="my-1" />
+        </div>
+    </div>
+    <p class="text-end fw-semibold">
+        Total: {{ cartService.totalCost | number : '1.2-2' }}
+    </p>
+    <button class="btn btn-success text-center w-100">
+        <a
+            routerLink="/cart"
+            class="text-decoration-none link-light">
+            <i class="bi bi-cart4"></i>
+            Go to cart
+        </a>
+    </button>
+</ng-container>
+
+<ng-template #emptyCart>
+    <p class="text-center">The cart is currently empty.</p>
+</ng-template>
