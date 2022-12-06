@@ -1,0 +1,74 @@
+<div class="container container-xl">
+    <form class="w-50 mx-auto">
+        <div class="mb-3">
+            <label
+                class="form-label"
+                for="username">
+                Username
+            </label>
+            <input
+                class="form-control"
+                type="text"
+                id="username"
+                name="username"
+                required
+                [(ngModel)]="registerDto.username" />
+        </div>
+        <div class="mb-3">
+            <label
+                class="form-label"
+                for="password">
+                Password
+            </label>
+            <input
+                class="form-control"
+                type="password"
+                name="password"
+                [(ngModel)]="registerDto.password"
+                id="password" />
+        </div>
+        <div class="mb-3">
+            <label
+                class="form-label"
+                for="repeat-password">
+                Repeat password
+            </label>
+            <input
+                class="form-control"
+                type="password"
+                id="repeat-password" />
+        </div>
+        <div class="mb-3">
+            <label
+                class="form-label"
+                for="email">
+                Email address
+            </label>
+            <input
+                class="form-control"
+                type="email"
+                name="email"
+                [(ngModel)]="registerDto.emailAddress"
+                id="email" />
+        </div>
+        <div class="mb-3">
+            <label
+                class="form-label"
+                for="phoneNumber">
+                Phone number
+            </label>
+            <input
+                class="form-control"
+                type="tel"
+                name="phoneNumber"
+                [(ngModel)]="registerDto.phoneNumber"
+                id="phoneNumber" />
+        </div>
+        <button
+            type="submit"
+            class="btn btn-primary"
+            (click)="register()">
+            Register
+        </button>
+    </form>
+</div>
