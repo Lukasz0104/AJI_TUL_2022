@@ -10,7 +10,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { AuthService } from './auth.service';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
-import { LocalAuthGuard } from './local-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -27,6 +27,6 @@ export class AuthController {
     @Post('/register')
     @HttpCode(204)
     async register(@Body() dto: CreateUserDto) {
-        this.authService.register(dto);
+        await this.authService.register(dto);
     }
 }

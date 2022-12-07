@@ -10,10 +10,10 @@ import {
     Query
 } from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { AdminRoute } from '../auth/admin-route.decorator';
 import { UserStrippedPassword } from '../auth/auth.service';
-import { CurrentUser } from '../auth/current-user.decorator';
-import { UserRoute } from '../auth/user-route.decorator';
+import { AdminRoute } from '../auth/decorators/admin-route.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { UserRoute } from '../auth/decorators/user-route.decorator';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { Order } from './entities/order.entity';
 import { OrderStatus } from './order-status.enum';

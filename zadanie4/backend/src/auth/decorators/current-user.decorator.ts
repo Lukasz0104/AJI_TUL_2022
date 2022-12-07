@@ -1,5 +1,5 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { UserStrippedPassword } from './auth.service';
+import { UserStrippedPassword } from '../auth.service';
 
 type RequestWithUser = Request & { user: UserStrippedPassword };
 

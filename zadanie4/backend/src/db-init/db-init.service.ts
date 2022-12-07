@@ -51,6 +51,20 @@ export class DbInitService implements OnApplicationBootstrap {
                 1,
                 0.5,
                 categories[0]
+            ),
+            new Product(
+                'Wooden chair',
+                'Very comfortable',
+                57.34,
+                3.2,
+                categories[3]
+            ),
+            new Product(
+                "Rubik's cube",
+                'Try to solve the best-selling toy yourself!',
+                37.99,
+                0.201,
+                categories[5]
             )
         ]);
     }

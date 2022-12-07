@@ -9,7 +9,7 @@ import {
     ValidationPipe
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AdminRoute } from '../auth/admin-route.decorator';
+import { AdminRoute } from '../auth/decorators/admin-route.decorator';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
