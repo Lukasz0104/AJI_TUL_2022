@@ -12,6 +12,7 @@ import { ProductsFilterComponent } from './components/products-filter/products-f
 import { ProductsComponent } from './components/products/products.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { RegisterComponent } from './components/register/register.component';
         ProductsFilterComponent,
         CartComponent,
         CartPopoverComponent,
-        RegisterComponent
+        RegisterComponent,
+        LoginComponent
     ],
     imports: [
         BrowserModule,
