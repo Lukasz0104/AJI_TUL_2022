@@ -4,7 +4,6 @@ import * as bcrypt from 'bcrypt';
 import { User } from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 import { CreateUserDto } from './../user/dto/create-user.dto';
-import { LoginCredentialsDto } from './dto/login-credentials.dto';
 
 export type UserStrippedPassword = Omit<User, 'password'>;
 
@@ -28,8 +27,8 @@ export class AuthService {
         return null;
     }
 
-    async login(user: LoginCredentialsDto) {
-        return this.jwtService.sign({ sub: user.username });
+    async login(username: string) {
+        return this.jwtService.sign({ sub: username });
     }
 
     async register(userData: CreateUserDto) {

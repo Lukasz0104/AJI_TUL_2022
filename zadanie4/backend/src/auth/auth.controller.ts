@@ -1,15 +1,10 @@
-import {
-    Body,
-    Controller,
-    Header,
-    HttpCode,
-    Post,
-    UseGuards
-} from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from '../user/dto/create-user.dto';
-import { AuthService } from './auth.service';
+import { AuthService, UserStrippedPassword } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
+import { LoginResponse } from './dto/login-response.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @Controller('auth')
@@ -18,10 +13,18 @@ export class AuthController {
     constructor(private authService: AuthService) {}
 
     @Post('/login')
-    @Header('content-type', 'text/plain')
+    @ApiBody({
+        type: LoginCredentialsDto
+    })
     @UseGuards(LocalAuthGuard)
-    async login(@Body() credentials: LoginCredentialsDto): Promise<string> {
-        return this.authService.login(credentials);
+    @HttpCode(200)
+    async login(
+        @CurrentUser() user: UserStrippedPassword
+    ): Promise<LoginResponse> {
+        return {
+            token: await this.authService.login(user.username),
+            role: user.role
+        };
     }
 
     @Post('/register')

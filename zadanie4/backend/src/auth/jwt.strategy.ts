@@ -5,6 +5,8 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserService } from '../user/user.service';
 import { UserStrippedPassword } from './auth.service';
 
+export type JwtPayload = { sub: string };
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor(
@@ -18,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         });
     }
 
-    async validate(payload): Promise<UserStrippedPassword> {
+    async validate(payload: JwtPayload): Promise<UserStrippedPassword> {
         const { password, ...user } = await this.userService.findByUsername(
             payload.sub
         );
