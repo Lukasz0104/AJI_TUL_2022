@@ -63,11 +63,16 @@
                     {{ cartService.totalCost | number : '1.2-2' }}
                 </span>
             </p>
-            <button
-                class="btn btn-outline-success"
-                (click)="createOrder()">
-                Place order
-            </button>
+            <span
+                placement="bottom"
+                [ngbTooltip]="tooltipMessage">
+                <button
+                    class="btn btn-success"
+                    [ngClass]="{ disabled: !authService.authenticated }"
+                    (click)="createOrder()">
+                    Place order
+                </button>
+            </span>
         </div>
     </ng-container>
 

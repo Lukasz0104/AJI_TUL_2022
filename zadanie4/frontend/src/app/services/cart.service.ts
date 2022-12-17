@@ -1,15 +1,26 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
+import { Order } from '../models/order';
 import { Product } from '../models/product';
 
 export type ProductWithQuantity = Product & { quantity: number };
+export interface CreateOrderDetails {
+    productId: number;
+    quantity: number;
+}
+
+export interface CreateOrder {
+    products: CreateOrderDetails[];
+}
 
 @Injectable({
     providedIn: 'root'
 })
 export class CartService {
     private readonly _cart: Map<number, ProductWithQuantity> = new Map();
+    private readonly ORDERS_URL = `${environment.apiUrl}/orders`;
 
     constructor(private httpClient: HttpClient) {}
 
@@ -58,9 +69,18 @@ export class CartService {
         this._cart.delete(id);
     }
 
-    placeOrder(): Observable<boolean> {
-        return of(false);
-        // TODO send http request
-        // TODO clear cart
+    placeOrder(): Observable<unknown> {
+        const body: CreateOrder = { products: [] };
+
+        this.cart.forEach((pwq: ProductWithQuantity) => {
+            body.products.push({
+                quantity: pwq.quantity,
+                productId: pwq.id
+            });
+        });
+
+        this.cart.clear();
+
+        return this.httpClient.post<Order>(this.ORDERS_URL, body);
     }
 }
