@@ -10,25 +10,21 @@
                     Products
                 </a>
             </li>
-            <li class="nav-item">
-                <a
-                    routerLink="/cart"
-                    class="nav-link"
-                    [ngClass]="{ active: this.router.url === '/cart' }">
-                    Cart
-                </a>
-            </li>
-            <li class="nav-item">
+            <li
+                class="nav-item"
+                *ngIf="authService.role === 'ADMIN'">
                 <a
                     routerLink="/"
                     class="nav-link"
-                    [ngClass]="{ active: this.router.url === '/' }">
+                    [ngClass]="{ active: this.router.url === '/orders' }">
                     Orders
                 </a>
             </li>
         </ul>
         <ul class="navbar-nav flex-row flex-wrap">
-            <li class="nav-item">
+            <li
+                *ngIf="authService.role !== 'ADMIN'"
+                class="nav-item">
                 <span
                     (mouseleave)="p.close()"
                     class="nav-link">
@@ -41,7 +37,8 @@
                         #p="ngbPopover">
                         <a
                             routerLink="/cart"
-                            class="nav-link d-inline">
+                            class="nav-link d-inline"
+                            [ngClass]="{ active: this.router.url === '/cart' }">
                             <i class="bi bi-cart4 position-relative px-1 mt-1">
                                 <ng-container *ngIf="cartService.count > 0">
                                     <span
@@ -54,24 +51,38 @@
                     </span>
                     <a
                         class="nav-link d-inline"
-                        routerLink="/cart">
+                        routerLink="/cart"
+                        [ngClass]="{ active: this.router.url === '/cart' }">
                         Cart
                     </a>
                 </span>
             </li>
-            <li class="nav-item">
-                <a
-                    routerLink="/login"
-                    class="nav-link">
-                    Login
-                </a>
-            </li>
-            <li class="nav-item">
-                <a
-                    routerLink="/register"
-                    class="nav-link">
-                    Register
-                </a>
+            <ng-container *ngIf="!authService.authenticated">
+                <li class="nav-item">
+                    <a
+                        routerLink="/login"
+                        class="nav-link"
+                        [ngClass]="{ active: this.router.url === '/login' }">
+                        Login
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a
+                        routerLink="/register"
+                        class="nav-link"
+                        [ngClass]="{ active: this.router.url === '/register' }">
+                        Register
+                    </a>
+                </li>
+            </ng-container>
+            <li
+                *ngIf="authService.authenticated"
+                class="nav-item d-flex align-items-center">
+                <button
+                    class="btn btn-danger"
+                    (click)="onLogout()">
+                    Log out
+                </button>
             </li>
         </ul>
     </div>

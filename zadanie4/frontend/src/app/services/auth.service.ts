@@ -12,7 +12,7 @@ import { RegisterDto } from '../models/register-dto';
 export class AuthService {
     private readonly AUTH_URL = `${environment.apiUrl}/auth`;
     private _authenticated = false;
-    private _token = '';
+    private _token: string | null = null;
     private _role: string | null = null;
 
     constructor(private httpClient: HttpClient) {}
@@ -21,7 +21,7 @@ export class AuthService {
         return this._authenticated;
     }
 
-    get token(): string {
+    get token(): string | null {
         return this._token;
     }
 
@@ -61,5 +61,11 @@ export class AuthService {
                     return of(false);
                 })
             );
+    }
+
+    logout() {
+        this._token = null;
+        this._authenticated = false;
+        this._role = null;
     }
 }

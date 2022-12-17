@@ -18,11 +18,10 @@ export class LoginComponent {
     login() {
         this.authService.login(this.loginDto).subscribe((success) => {
             if (success) {
-                this.loginDto.username = '';
-                this.loginDto.password = '';
-
                 this.router.navigate(['/']);
             }
+            this.loginDto.username = '';
+            this.loginDto.password = '';
         });
     }
 }

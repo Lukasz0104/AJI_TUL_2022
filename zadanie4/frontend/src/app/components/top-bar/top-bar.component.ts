@@ -1,5 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { CartService } from '../../services/cart.service';
 
 @Component({
@@ -9,5 +10,13 @@ import { CartService } from '../../services/cart.service';
     styleUrls: ['./top-bar.component.css']
 })
 export class TopBarComponent {
-    constructor(protected router: Router, protected cartService: CartService) {}
+    constructor(
+        protected router: Router,
+        protected cartService: CartService,
+        protected readonly authService: AuthService
+    ) {}
+
+    onLogout(): void {
+        this.authService.logout();
+    }
 }
