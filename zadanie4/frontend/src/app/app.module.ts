@@ -14,6 +14,7 @@ import { ProductsComponent } from './components/products/products.component';
 import { RegisterComponent } from './components/register/register.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { JwtInterceptor } from './jwt.interceptor';
+import { OrdersComponent } from './components/orders/orders.component';
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { JwtInterceptor } from './jwt.interceptor';
         CartComponent,
         CartPopoverComponent,
         RegisterComponent,
-        LoginComponent
+        LoginComponent,
+        OrdersComponent
     ],
     imports: [
         BrowserModule,

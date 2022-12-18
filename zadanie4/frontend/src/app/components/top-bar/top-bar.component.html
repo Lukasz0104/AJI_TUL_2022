@@ -14,7 +14,7 @@
                 class="nav-item"
                 *ngIf="authService.role === 'ADMIN'">
                 <a
-                    routerLink="/"
+                    routerLink="/orders"
                     class="nav-link"
                     [ngClass]="{ active: this.router.url === '/orders' }">
                     Orders

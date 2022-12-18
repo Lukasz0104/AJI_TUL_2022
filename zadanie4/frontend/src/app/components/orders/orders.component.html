@@ -1,0 +1,71 @@
+<div class="container container-xl">
+    <ng-container *ngIf="orders$ | async as orders; else loadingOrders">
+        <table class="table table-striped">
+            <thead>
+                <tr class="text-center">
+                    <th class="col">#</th>
+                    <th class="col">Order date</th>
+                    <th class="col">Status</th>
+                    <th class="col col-2">Email address</th>
+                    <th class="col">Phone number</th>
+                    <th class="col col-4"></th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr
+                    *ngFor="let order of orders; let i = index"
+                    class="text-center">
+                    <td>
+                        {{ i + 1 }}
+                    </td>
+                    <td>
+                        {{ order.acceptDate | date : 'medium' }}
+                    </td>
+                    <td>
+                        {{ order.status }}
+                    </td>
+                    <td>
+                        {{ order.emailAddress }}
+                    </td>
+                    <td>
+                        {{ order.phoneNumber }}
+                    </td>
+                    <td class="d-flex justify-content-around">
+                        <button
+                            [disabled]="!canApprove(order)"
+                            class="btn btn-warning"
+                            (click)="onApprove(order.id)">
+                            <i class="bi bi-check-lg"></i>
+                            <span>Approve</span>
+                        </button>
+                        <button
+                            [disabled]="!canComplete(order)"
+                            class="btn btn-success"
+                            (click)="onComplete(order.id)">
+                            <i class="bi bi-check-circle"></i>
+                            Complete
+                        </button>
+                        <button
+                            [disabled]="!canCancel(order)"
+                            class="btn btn-danger"
+                            (click)="onCancel(order.id)">
+                            <i class="bi bi-x-lg"></i>
+                            Cancel
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </ng-container>
+</div>
+
+<ng-template #loadingOrders>
+    <div class="text-center mx-auto mt-3">
+        <div
+            class="spinner-border text-primary"
+            role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p>Loading orders...</p>
+    </div>
+</ng-template>
