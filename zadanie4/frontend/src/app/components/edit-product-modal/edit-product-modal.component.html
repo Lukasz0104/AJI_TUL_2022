@@ -1,0 +1,81 @@
+<div class="container mt-2">
+    <form (submit)="onSubmit()">
+        <div class="mb-2">
+            <label
+                class="form-label"
+                for="Name">
+                Name
+            </label>
+            <input
+                class="form-control"
+                name="Name"
+                [(ngModel)]="dto.name" />
+        </div>
+        <div class="mb-2">
+            <label
+                class="form-label"
+                for="Desc">
+                Description
+            </label>
+            <input
+                class="form-control"
+                name="Desc"
+                [value]="dto.description"
+                [(ngModel)]="dto.description" />
+        </div>
+        <div class="mb-2">
+            <label
+                class="form-label"
+                for="UnitPrice">
+                Unit price
+            </label>
+            <input
+                name="UnitPrice"
+                class="form-control"
+                type="number"
+                [value]="dto.unitPrice"
+                [(ngModel)]="dto.unitPrice" />
+        </div>
+        <div class="mb-2">
+            <label
+                class="form-label"
+                for="UnitWeight">
+                Unit weight
+            </label>
+            <input
+                class="form-control"
+                name="UnitWeight"
+                type="number"
+                [value]="dto.unitWeight"
+                [(ngModel)]="dto.unitWeight" />
+        </div>
+        <div class="mb-2">
+            <label for="Category">Category</label>
+            <select
+                class="form-select"
+                name="Category"
+                [(ngModel)]="dto.categoryId"
+                [value]="dto.categoryId">
+                <option
+                    *ngFor="let category of categories$ | async"
+                    [ngValue]="category.id"
+                    [selected]="category.id === dto.categoryId">
+                    {{ category.name }}
+                </option>
+            </select>
+        </div>
+        <div class="mb-2 d-flex justify-content-end">
+            <button
+                class="btn btn-danger mx-2"
+                type="button"
+                (click)="activeModal.close(product)">
+                Cancel
+            </button>
+            <button
+                class="btn btn-info mx-2"
+                type="submit">
+                Save
+            </button>
+        </div>
+    </form>
+</div>

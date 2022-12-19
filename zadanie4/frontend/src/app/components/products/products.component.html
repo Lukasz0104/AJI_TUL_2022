@@ -23,12 +23,26 @@
                     <td class="text-center">{{ product.unitWeight }}</td>
                     <td class="text-center">{{ product.category.name }}</td>
                     <td class="text-center">
-                        <button
-                            class="btn btn-outline-primary px-3"
-                            (click)="addToCart(product)">
-                            <i class="bi bi-cart-plus"></i>
-                            <span class="mx-2">Add to cart</span>
-                        </button>
+                        <ng-container
+                            *ngIf="
+                                authService.role === 'ADMIN';
+                                else addToCartButton
+                            ">
+                            <button
+                                class="btn btn-warning px-3"
+                                (click)="showEditModal(product)">
+                                <i class="bi bi-pencil-square"></i>
+                                <span class="mx-2">Edit</span>
+                            </button>
+                        </ng-container>
+                        <ng-template #addToCartButton>
+                            <button
+                                class="btn btn-outline-primary px-3"
+                                (click)="addToCart(product)">
+                                <i class="bi bi-cart-plus"></i>
+                                <span class="mx-2">Add to cart</span>
+                            </button>
+                        </ng-template>
                     </td>
                 </tr>
             </tbody>

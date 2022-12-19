@@ -46,6 +46,13 @@ export class ProductService {
         p.unitPrice = updateProductDto.unitPrice ?? p.unitPrice;
         p.unitWeight = updateProductDto.unitWeight ?? p.unitWeight;
 
+        if (updateProductDto.categoryId) {
+            p.category =
+                (await this.categoryRepo.findOneBy({
+                    id: updateProductDto.categoryId
+                })) ?? p.category;
+        }
+
         return this.productRepo.save(p);
     }
 

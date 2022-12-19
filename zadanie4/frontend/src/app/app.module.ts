@@ -8,13 +8,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { CartPopoverComponent } from './components/cart-popover/cart-popover.component';
 import { CartComponent } from './components/cart/cart.component';
+import { EditProductModalComponent } from './components/edit-product-modal/edit-product-modal.component';
 import { LoginComponent } from './components/login/login.component';
+import { OrdersComponent } from './components/orders/orders.component';
 import { ProductsFilterComponent } from './components/products-filter/products-filter.component';
 import { ProductsComponent } from './components/products/products.component';
 import { RegisterComponent } from './components/register/register.component';
 import { TopBarComponent } from './components/top-bar/top-bar.component';
 import { JwtInterceptor } from './jwt.interceptor';
-import { OrdersComponent } from './components/orders/orders.component';
 
 @NgModule({
     declarations: [
@@ -26,7 +27,8 @@ import { OrdersComponent } from './components/orders/orders.component';
         CartPopoverComponent,
         RegisterComponent,
         LoginComponent,
-        OrdersComponent
+        OrdersComponent,
+        EditProductModalComponent
     ],
     imports: [
         BrowserModule,

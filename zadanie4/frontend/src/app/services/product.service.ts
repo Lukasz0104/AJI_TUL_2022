@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, retry } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Product } from '../models/product';
+import { UpdateProductDto } from '../models/update-product-dto';
 
 @Injectable({
     providedIn: 'root'
@@ -14,5 +15,13 @@ export class ProductService {
 
     get(): Observable<Product[]> {
         return this.httpClient.get<Product[]>(this.PRODUCTS_URL).pipe(retry(5));
+    }
+
+    update(id: number, dto: UpdateProductDto): Observable<Product> {
+        console.log(dto);
+        return this.httpClient.patch<Product>(
+            `${this.PRODUCTS_URL}/${id}`,
+            dto
+        );
     }
 }
