@@ -1,62 +1,73 @@
-<ng-container *ngIf="products.length > 0; else elseBlock">
-    <div class="container container-xl">
-        <app-products-filter (filtersChanged)="filterProducts($event)">
-        </app-products-filter>
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th class="col text-center">#</th>
-                    <th class="col col-2 text-center">Name</th>
-                    <th class="col col-4 text-center">Description</th>
-                    <th class="col text-center">Price</th>
-                    <th class="col text-center">Weight</th>
-                    <th class="col col-2 text-center">Category</th>
-                    <th class="col text-center"></th>
-                </tr>
-            </thead>
-            <tbody class="table-group-divider">
-                <tr *ngFor="let product of products; let i = index">
-                    <td class="text-center">{{ i + 1 }}</td>
-                    <td class="text-center">{{ product.name }}</td>
-                    <td>{{ product.description }}</td>
-                    <td class="text-center">{{ product.unitPrice }}</td>
-                    <td class="text-center">{{ product.unitWeight }}</td>
-                    <td class="text-center">{{ product.category.name }}</td>
-                    <td class="text-center">
-                        <ng-container
-                            *ngIf="
-                                authService.role === 'ADMIN';
-                                else addToCartButton
-                            ">
-                            <button
-                                class="btn btn-warning px-3"
-                                (click)="showEditModal(product)">
-                                <i class="bi bi-pencil-square"></i>
-                                <span class="mx-2">Edit</span>
-                            </button>
-                        </ng-container>
-                        <ng-template #addToCartButton>
-                            <button
-                                class="btn btn-outline-primary px-3"
-                                (click)="addToCart(product)">
-                                <i class="bi bi-cart-plus"></i>
-                                <span class="mx-2">Add to cart</span>
-                            </button>
-                        </ng-template>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</ng-container>
+<div class="container-xl">
+    <app-products-filter (filtersChanged)="filters = $event">
+    </app-products-filter>
+    <ng-container *ngIf="products.length > 0; else elseBlock">
+        <div class="table-responsive-lg">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th class="col text-center">#</th>
+                        <th class="col col-2 text-center">Name</th>
+                        <th class="col col-4 text-center">Description</th>
+                        <th class="col text-center">Price</th>
+                        <th class="col text-center">Weight</th>
+                        <th class="col col-2 text-center">Category</th>
+                        <th class="col text-center"></th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    <tr *ngFor="let product of products; let i = index">
+                        <td class="text-center">{{ i + 1 }}</td>
+                        <td class="text-center">{{ product.name }}</td>
+                        <td>{{ product.description }}</td>
+                        <td class="text-center">{{ product.unitPrice }}</td>
+                        <td class="text-center">{{ product.unitWeight }}</td>
+                        <td class="text-center">{{ product.category.name }}</td>
+                        <td class="text-center">
+                            <ng-container
+                                *ngIf="
+                                    authService.role === 'ADMIN';
+                                    else addToCartButton
+                                ">
+                                <button
+                                    class="btn btn-warning px-3"
+                                    (click)="showEditModal(product)">
+                                    <i class="bi bi-pencil-square"></i>
+                                    <span class="mx-2">Edit</span>
+                                </button>
+                            </ng-container>
+                            <ng-template #addToCartButton>
+                                <button
+                                    class="btn btn-outline-primary px-3"
+                                    (click)="addToCart(product)">
+                                    <i class="bi bi-cart-plus"></i>
+                                    <span class="mx-2">Add to cart</span>
+                                </button>
+                            </ng-template>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-container>
+</div>
 
 <ng-template #elseBlock>
     <div class="text-center my-3">
-        <h4>Fetching data, please wait...</h4>
-        <div
-            class="spinner-border text-primary mt-3"
-            role="status">
-            <span class="visually-hidden"></span>
-        </div>
+        <ng-container
+            *ngIf="
+                filters.name || filters.categories.size;
+                else loadingProducts
+            ">
+            <h4>There are no products for selected filters.</h4>
+        </ng-container>
+        <ng-template #loadingProducts>
+            <h4>Fetching products, please wait...</h4>
+            <div
+                class="spinner-border text-primary mt-3"
+                role="status">
+                <span class="visually-hidden"></span>
+            </div>
+        </ng-template>
     </div>
 </ng-template>

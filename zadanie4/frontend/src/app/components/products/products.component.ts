@@ -12,7 +12,12 @@ import { Filters } from '../products-filter/products-filter.component';
     templateUrl: './products.component.html'
 })
 export class ProductsComponent implements OnInit {
-    products: Product[] = [];
+    private _products: Product[] = [];
+    protected filters: Filters = new Filters();
+
+    get products(): Product[] {
+        return this.applyFilters();
+    }
 
     constructor(
         private productService: ProductService,
@@ -24,31 +29,48 @@ export class ProductsComponent implements OnInit {
     ngOnInit(): void {
         this.productService
             .get()
-            .subscribe((products) => (this.products = products));
+            .subscribe((products) => (this._products = products));
     }
 
-    filterProducts(filters: Filters) {
-        // TODO add filtering logic
+    protected applyFilters(): Product[] {
+        return this._products.filter((p) => {
+            if (
+                this.filters.name &&
+                !p.name
+                    .toLocaleLowerCase()
+                    .includes(this.filters.name.toLocaleLowerCase())
+            ) {
+                return false;
+            }
+
+            if (
+                this.filters.categories.size > 0 &&
+                !this.filters.categories.has(p.category.id)
+            ) {
+                return false;
+            }
+
+            return true;
+        });
     }
 
     addToCart(p: Product) {
         this.cartService.addProduct(p.id, p);
     }
 
-    showEditModal(productToEdit: Product) {
-        const editModal = this.modalService.open(EditProductModalComponent, {});
-        (editModal.componentInstance as EditProductModalComponent).product =
-            productToEdit;
+    showEditModal(toEdit: Product) {
+        const modal = this.modalService.open(EditProductModalComponent, {});
+        (modal.componentInstance as EditProductModalComponent).product = toEdit;
 
-        editModal.result.then(
+        modal.result.then(
             (updated: Product) => {
                 if (updated) {
-                    const index = this.products.findIndex(
+                    const index = this._products.findIndex(
                         (p) => p.id === updated.id
                     );
 
                     if (index > -1) {
-                        this.products[index] = updated;
+                        this._products[index] = updated;
                     }
                 }
             },

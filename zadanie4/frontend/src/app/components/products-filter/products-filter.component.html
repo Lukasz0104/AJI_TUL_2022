@@ -1,11 +1,16 @@
 <form>
-    <div class="d-flex flex-row justify-content-around">
-        <div class="">
-            <label class="form-label mx-3">Name:</label>
-            <input
-                [(ngModel)]="filters.name"
-                (input)="inputsChanged()"
-                name="productName" />
+    <div class="d-flex flex-row justify-content-around flex-wrap">
+        <div class="row align-items-center">
+            <div class="col-auto px-0 m-1">
+                <label class="form-label mx-3">Name:</label>
+            </div>
+            <div class="col-auto px-0 m-1">
+                <input
+                    [(ngModel)]="filters.name"
+                    (input)="inputsChanged()"
+                    class="form-control d-inline"
+                    name="productName" />
+            </div>
         </div>
         <div class="">
             <label class="form-label mx-3">Categories:</label>
