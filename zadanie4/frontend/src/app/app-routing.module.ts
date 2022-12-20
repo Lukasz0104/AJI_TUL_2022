@@ -9,7 +9,14 @@ import { RoleGuard } from './role.guard';
 
 const routes: Routes = [
     { path: 'products', component: ProductsComponent },
-    { path: 'cart', component: CartComponent },
+    {
+        path: 'cart',
+        component: CartComponent,
+        canActivate: [RoleGuard],
+        data: {
+            allowedRoles: ['USER', null]
+        }
+    },
     { path: 'register', component: RegisterComponent },
     { path: 'login', component: LoginComponent },
     {
@@ -17,9 +24,10 @@ const routes: Routes = [
         component: OrdersComponent,
         canActivate: [RoleGuard],
         data: {
-            role: 'ADMIN'
+            allowedRoles: ['ADMIN']
         }
-    }
+    },
+    { path: '**', redirectTo: '/products' }
 ];
 
 @NgModule({

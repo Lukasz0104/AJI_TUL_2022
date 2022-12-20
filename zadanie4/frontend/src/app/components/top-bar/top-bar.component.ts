@@ -10,6 +10,8 @@ import { CartService } from '../../services/cart.service';
     styleUrls: ['./top-bar.component.css']
 })
 export class TopBarComponent {
+    protected isCollapsed = true;
+
     constructor(
         protected router: Router,
         protected cartService: CartService,

@@ -1,4 +1,4 @@
-<div class="container container-xl">
+<div class="container-xl">
     <form class="w-50 mx-auto">
         <div class="mb-3">
             <label
@@ -11,6 +11,7 @@
                 class="form-control"
                 id="username"
                 name="username"
+                required
                 [(ngModel)]="loginDto.username" />
         </div>
         <div class="mb-3">
@@ -24,6 +25,7 @@
                 class="form-control"
                 id="password"
                 name="password"
+                required
                 [(ngModel)]="loginDto.password" />
         </div>
         <button
