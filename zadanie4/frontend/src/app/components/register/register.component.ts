@@ -12,9 +12,11 @@ export class RegisterComponent {
     constructor(protected authService: AuthService) {}
 
     register() {
-        // TODO add validation
         this.authService.register(this.registerDto).subscribe((success) => {
             console.log(success);
+            if (success) {
+                alert('Registration successful');
+            }
             // TODO show toast message
         });
     }

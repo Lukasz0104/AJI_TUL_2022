@@ -1,5 +1,7 @@
 <div class="container-xl">
-    <form class="w-50 mx-auto">
+    <form
+        class="w-50 mx-auto"
+        #form="ngForm">
         <div class="mb-3">
             <label
                 class="form-label"
@@ -12,7 +14,13 @@
                 id="username"
                 name="username"
                 required
+                #username="ngModel"
                 [(ngModel)]="registerDto.username" />
+            <div
+                *ngIf="username.invalid"
+                class="text-danger">
+                Username must not be empty.
+            </div>
         </div>
         <div class="mb-3">
             <label
@@ -25,7 +33,15 @@
                 type="password"
                 name="password"
                 [(ngModel)]="registerDto.password"
+                required
+                #password="ngModel"
                 id="password" />
+            <div
+                *ngIf="password.invalid"
+                class="text-danger">
+                Password must not be empty.
+                {{ password.value }}
+            </div>
         </div>
         <!-- <div class="mb-3">
             <label
@@ -36,7 +52,25 @@
             <input
                 class="form-control"
                 type="password"
+                ngModel
+                required
+                #repeatPassword="ngModel"
                 id="repeat-password" />
+            <div
+                *ngIf="
+                    repeatPassword.value !== password.value ||
+                    (repeatPassword.invalid &&
+                        (repeatPassword.dirty || repeatPassword.touched))
+                "
+                class="text-danger">
+                <ng-container
+                    *ngIf="repeatPassword.errors?.['required']; else passwordNotMatching">
+                    Repeat password must not be empty.
+                </ng-container>
+                <ng-template #passwordNotMatching>
+                    Repeat password must match password.
+                </ng-template>
+            </div>
         </div> -->
         <div class="mb-3">
             <label
@@ -48,8 +82,20 @@
                 class="form-control"
                 type="email"
                 name="email"
+                required
+                email="true"
+                #emailAddress="ngModel"
                 [(ngModel)]="registerDto.emailAddress"
                 id="email" />
+            <div
+                *ngIf="emailAddress.invalid"
+                class="text-danger">
+                <ng-container
+                    *ngIf="emailAddress.errors?.['required']; else invalidEmail">
+                    Email must not be empty.
+                </ng-container>
+                <ng-template #invalidEmail>Email must be valid.</ng-template>
+            </div>
         </div>
         <div class="mb-3">
             <label
@@ -61,11 +107,25 @@
                 class="form-control"
                 type="tel"
                 name="phoneNumber"
+                pattern="^[1-9]\d{8}$"
+                #phoneNumber="ngModel"
+                required
                 [(ngModel)]="registerDto.phoneNumber"
                 id="phoneNumber" />
+            <div
+                *ngIf="phoneNumber.invalid"
+                class="text-danger">
+                <ng-container *ngIf="phoneNumber.errors?.['required']">
+                    Phone number is required.
+                </ng-container>
+                <ng-container *ngIf="phoneNumber.errors?.['pattern']">
+                    Phone number must be 9 digits long.
+                </ng-container>
+            </div>
         </div>
         <button
             type="submit"
+            [disabled]="form.invalid"
             class="btn btn-primary"
             (click)="register()">
             Register

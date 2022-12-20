@@ -1,5 +1,7 @@
 <div class="container-xl">
-    <form class="w-50 mx-auto">
+    <form
+        class="w-50 mx-auto needs-validation"
+        novalidate>
         <div class="mb-3">
             <label
                 for="username"
@@ -12,7 +14,13 @@
                 id="username"
                 name="username"
                 required
+                #username="ngModel"
                 [(ngModel)]="loginDto.username" />
+            <div
+                *ngIf="username.invalid"
+                class="text-danger">
+                Username is required.
+            </div>
         </div>
         <div class="mb-3">
             <label
@@ -26,9 +34,16 @@
                 id="password"
                 name="password"
                 required
+                #password="ngModel"
                 [(ngModel)]="loginDto.password" />
+            <div
+                *ngIf="password.invalid"
+                class="text-danger">
+                Password must not be empty.
+            </div>
         </div>
         <button
+            [disabled]="!(loginDto.username && loginDto.password)"
             class="btn btn-primary"
             (click)="login()">
             Log in
