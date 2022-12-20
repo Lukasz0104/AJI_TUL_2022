@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, EMPTY } from 'rxjs';
 import { Category } from '../../models/category';
 import { Product } from '../../models/product';
 import { UpdateProductDto } from '../../models/update-product-dto';
@@ -15,6 +15,11 @@ export class EditProductModalComponent {
     protected categories$ = new BehaviorSubject<Category[]>([]);
 
     protected dto: UpdateProductDto = {};
+
+    protected errors = {
+        unitPrice: '',
+        unitWeight: ''
+    };
 
     private _product: Product | null = null;
 
@@ -44,6 +49,25 @@ export class EditProductModalComponent {
         if (this._product) {
             this.productService
                 .update(this._product.id, this.dto)
+                .pipe(
+                    catchError((e, _) => {
+                        for (const message of e.error.message as string[]) {
+                            const splitted = message.split(' ');
+                            switch (splitted[0]) {
+                                case 'unitPrice':
+                                    this.errors.unitPrice =
+                                        'Price ' + splitted.slice(1).join(' ');
+                                    break;
+                                case 'unitWeight':
+                                    this.errors.unitWeight =
+                                        'Weight ' + splitted.slice(1).join(' ');
+                                    break;
+                            }
+                        }
+
+                        return EMPTY;
+                    })
+                )
                 .subscribe((updated) => {
                     console.log(updated);
 

@@ -18,7 +18,6 @@ export class ProductService {
     }
 
     update(id: number, dto: UpdateProductDto): Observable<Product> {
-        console.log(dto);
         return this.httpClient.patch<Product>(
             `${this.PRODUCTS_URL}/${id}`,
             dto
