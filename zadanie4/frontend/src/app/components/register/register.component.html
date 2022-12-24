@@ -43,7 +43,7 @@
                 {{ password.value }}
             </div>
         </div>
-        <!-- <div class="mb-3">
+        <div class="mb-3">
             <label
                 class="form-label"
                 for="repeat-password">
@@ -54,24 +54,24 @@
                 type="password"
                 ngModel
                 required
-                #repeatPassword="ngModel"
+                #repeatPasswordInput="ngModel"
+                name="repeat-password"
                 id="repeat-password" />
             <div
                 *ngIf="
-                    repeatPassword.value !== password.value ||
-                    (repeatPassword.invalid &&
-                        (repeatPassword.dirty || repeatPassword.touched))
+                    repeatPasswordInput.invalid ||
+                    repeatPasswordInput.value !== password.value
                 "
                 class="text-danger">
                 <ng-container
-                    *ngIf="repeatPassword.errors?.['required']; else passwordNotMatching">
-                    Repeat password must not be empty.
+                    *ngIf="repeatPasswordInput.errors?.['required']; else passwordNotMatching">
+                    Repeat password is required.
                 </ng-container>
                 <ng-template #passwordNotMatching>
                     Repeat password must match password.
                 </ng-template>
             </div>
-        </div> -->
+        </div>
         <div class="mb-3">
             <label
                 class="form-label"

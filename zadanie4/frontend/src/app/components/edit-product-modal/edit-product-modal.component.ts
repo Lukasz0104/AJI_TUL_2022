@@ -7,6 +7,10 @@ import { UpdateProductDto } from '../../models/update-product-dto';
 import { CategoryService } from '../../services/category.service';
 import { ProductService } from '../../services/product.service';
 
+export type UpdateProductErros = {
+    [Property in keyof UpdateProductDto]: string | undefined;
+};
+
 @Component({
     selector: 'app-edit-product',
     templateUrl: './edit-product-modal.component.html'
@@ -16,10 +20,7 @@ export class EditProductModalComponent {
 
     protected dto: UpdateProductDto = {};
 
-    protected errors = {
-        unitPrice: '',
-        unitWeight: ''
-    };
+    protected errors: UpdateProductErros = {};
 
     private _product: Product | null = null;
 
@@ -69,8 +70,6 @@ export class EditProductModalComponent {
                     })
                 )
                 .subscribe((updated) => {
-                    console.log(updated);
-
                     this.activeModal.close(updated);
                 });
         }

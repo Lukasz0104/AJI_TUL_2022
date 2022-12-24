@@ -37,9 +37,6 @@ export class AuthService {
             .pipe(
                 map((res: HttpResponse<void>) => {
                     return res.status === 204;
-                }),
-                catchError(() => {
-                    return of(false);
                 })
             );
     }
